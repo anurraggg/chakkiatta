@@ -34,15 +34,15 @@
         const keyCell = cols[0];
         const valueCell = cols[1];
         const key = keyCell.querySelector('p')?.textContent?.trim().toLowerCase();
-        let value = valueCell.innerHTML.trim(); // Use innerHTML to preserve <br> or structure
+        let value = valueCell.innerHTML.trim(); // Preserve <br> and structure
         const img = valueCell.querySelector('img');
         if (img) {
           value = img.src;
           console.log('parseBlockConfig: Image src', value);
         }
-        // Clean up value if not image (remove extra tags/whitespace)
+        // For non-image, clean tags but keep <br> for lines
         if (!img && value) {
-          value = value.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '').trim(); // Strip tags, keep \n
+          value = value.replace(/<p[^>]*>/gi, '').replace(/<\/p>/gi, '\n').replace(/<br\s*\/?>/gi, '<br>').trim();
         }
         console.log('parseBlockConfig: Key/Value', key, '=>', value.substring(0, 50) + '...');
         if (key && value) {
@@ -76,13 +76,15 @@
   /**
    * Builds nutrition list.
    * @param {string} nutrition Pipe-separated facts.
-   * @returns {Element} DL element.
+   * @returns {Element|null} DL element or null if empty.
    */
   function buildNutrition(nutrition) {
-    if (!nutrition) return null; // Return null if empty—no "Energy" ghost
+    if (!nutrition || nutrition.trim() === '') return null;
     const dl = document.createElement('dl');
     dl.classList.add('nutrition');
-    nutrition.split('|').forEach((fact) => {
+    const facts = nutrition.split('|');
+    console.log('buildNutrition: Facts', facts);
+    facts.forEach((fact) => {
       const [term, def] = fact.split(':');
       if (term && def) {
         const dt = document.createElement('dt');
@@ -115,7 +117,7 @@
     const container = document.createElement('div');
     container.classList.add('aashirvaad-product-detail');
   
-    // Image
+    // Image (left)
     if (imageUrl) {
       const img = document.createElement('img');
       img.src = imageUrl;
@@ -123,11 +125,12 @@
       img.classList.add('product-image');
       img.loading = 'lazy';
       container.appendChild(img);
+      console.log('decorate: Added image');
     } else {
-      console.log('decorate: No image URL—add "image" row with pasted PNG');
+      console.log('decorate: No image—add "image" row');
     }
   
-    // Info
+    // Info (right)
     const info = document.createElement('div');
     info.classList.add('product-info');
   
@@ -139,9 +142,9 @@
     if (description) {
       const p = document.createElement('p');
       p.classList.add('product-description');
-      p.innerHTML = description.replace(/\n/g, '<br>'); // Re-apply <br> for lines
+      p.innerHTML = description; // Direct innerHTML preserves <br>
       info.appendChild(p);
-      console.log('decorate: Description rendered with breaks');
+      console.log('decorate: Description rendered');
     }
   
     const readMore = document.createElement('a');
@@ -155,6 +158,7 @@
     const nutritionEl = buildNutrition(nutrition);
     if (nutritionEl) {
       info.appendChild(nutritionEl);
+      console.log('decorate: Added nutrition');
     }
   
     container.appendChild(info);
