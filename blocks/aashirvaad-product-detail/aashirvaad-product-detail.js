@@ -18,13 +18,15 @@
 /**
  * Parses the block's table rows into a config object.
  * Skips the first row (block name), extracts key/value pairs from subsequent rows.
- * Handles multi-line text and pasted images.
+ * Handles multi-line text (aggregates <p> children) and pasted images.
  * @param {Element} block The block element with child divs.
  * @returns {Object} Config object.
  */
  function parseBlockConfig(block) {
+    console.log('parseBlockConfig: Starting parse'); // Debug
     const config = {};
     const rows = [...block.children];
+    console.log('parseBlockConfig: Found rows', rows.length);
     for (let i = 1; i < rows.length; i += 1) {
       const row = rows[i];
       const cols = [...row.children];
@@ -32,16 +34,26 @@
         const keyCell = cols[0];
         const valueCell = cols[1];
         const key = keyCell.querySelector('p')?.textContent?.trim().toLowerCase();
-        let value = valueCell.querySelector('p')?.textContent?.trim() || '';
+        let value = '';
+        // Enhanced: Aggregate all <p> in value cell for multi-line
+        const ps = [...valueCell.querySelectorAll('p')];
+        if (ps.length > 0) {
+          value = ps.map(p => p.textContent.trim()).join('\n'); // Join with \n
+        } else {
+          value = valueCell.querySelector('p')?.textContent?.trim() || '';
+        }
         const img = valueCell.querySelector('img');
         if (img) {
           value = img.src;
+          console.log('parseBlockConfig: Image src', value);
         }
+        console.log('parseBlockConfig: Key/Value', key, '=>', value.substring(0, 50) + '...'); // Truncated log
         if (key && value) {
           config[key] = value;
         }
       }
     }
+    console.log('parseBlockConfig: Final config', config);
     return config;
   }
   
@@ -92,6 +104,7 @@
    * @param {Element} block The block element.
    */
   export default async function decorate(block) {
+    console.log('decorate: Starting');
     const config = parseBlockConfig(block);
     const imageUrl = config.image || '';
     const title = config.title || 'Product Title';
@@ -127,7 +140,8 @@
     if (description) {
       const p = document.createElement('p');
       p.classList.add('product-description');
-      p.innerHTML = description.replace(/\n/g, '<br>'); // Preserve lines
+      // Enhanced: Split on \n and wrap in <span> for better flow, or use <br>
+      p.innerHTML = description.replace(/\n/g, '<br>');
       info.appendChild(p);
     }
   
