@@ -154,7 +154,7 @@ export default async function decorate(block) {
   const config = parseBlockConfig(block);
 
   // Extract config values with defaults
-  let logoUrl = config['logo-url'] || `${window.hlx.codeBasePath}/icons/aashirvaad-logo.svg`;
+  let logoUrl = config['logo-url'] || `${window.hlx.codeBasePath}/icons/aashirvaad-logo.png`;
   console.log('decorate: Logo URL', logoUrl); // Log logo
   const navStructure = config['nav-structure'];
   const navItems = parseNavStructure(navStructure);
