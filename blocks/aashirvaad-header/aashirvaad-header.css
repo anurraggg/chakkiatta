@@ -1,0 +1,79 @@
+/* aashirvaad-header.css */
+
+/*
+ * Copyright 2025 Franklin. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+ .aashirvaad-header {
+    background-color: #ff0000;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    height: 60px;
+    position: relative;
+  }
+  
+  .aashirvaad-header.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  
+  .aashirvaad-header .logo {
+    height: 40px;
+    width: auto;
+  }
+  
+  .aashirvaad-header .nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 30px;
+  }
+  
+  .aashirvaad-header .nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .aashirvaad-header .nav-item:hover {
+    text-decoration: underline;
+  }
+  
+  .aashirvaad-header .search-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0.8;
+  }
+  
+  .aashirvaad-header .search-icon:hover {
+    opacity: 1;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .aashirvaad-header .nav {
+      display: none;
+    }
+  
+    .aashirvaad-header .search-icon {
+      display: block;
+    }
+  }
