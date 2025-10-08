@@ -26,7 +26,7 @@ export default async function decorate(block) {
   const config = readBlockConfig(block);
 
   // Extract config values with defaults
-  const logoUrl = config['logo-url'] || `${window.hlx.codeBasePath}/icons/aashirvaad-logo.svg`;
+  const logoUrl = config['logo-url'] || `${window.hlx.codeBasePath}/icons/aashirvaad.png`;
   const navItems = config['nav-items'] ? config['nav-items'].split('|').map(item => item.trim()) : ['Our Products', 'Our Story', 'Recipe', 'Blogs', 'FAQs'];
   const searchEnabled = config['search-enabled'] !== 'false';
   const isFixed = config.fixed === 'true';
