@@ -18,6 +18,80 @@
 import { readBlockConfig } from '../../scripts/aem.js';
 
 /**
+ * Parses the nav-structure config into a hierarchical array.
+ * @param {string} navStructure The raw nav-structure string.
+ * @returns {Array} Array of nav items, each with optional sub-items.
+ */
+function parseNavStructure(navStructure) {
+  if (!navStructure) {
+    return [
+      { label: 'Our Products', subItems: ['Atta', 'Salt', 'Organic', 'Bensan', 'Millets', 'Vermicelli', 'Rava', 'Naans & Parathas'] },
+      { label: 'Our Story' },
+      { label: 'Recipe' },
+      { label: 'Blogs' },
+      { label: 'FAQs' }
+    ];
+  }
+
+  const lines = navStructure.split('\n').map(line => line.trim()).filter(line => line);
+  const navItems = [];
+
+  lines.forEach((line) => {
+    if (line.includes(':')) {
+      const [parent, subsStr] = line.split(':', 2);
+      const subItems = subsStr ? subsStr.split('|').map(sub => sub.trim()).filter(sub => sub) : [];
+      navItems.push({ label: parent.trim(), subItems });
+    } else {
+      navItems.push({ label: line.trim(), subItems: [] });
+    }
+  });
+
+  return navItems;
+}
+
+/**
+ * Builds the nested nav DOM.
+ * @param {Array} navItems The parsed nav items.
+ * @returns {Element} The nav element.
+ */
+function buildNav(navItems) {
+  const nav = document.createElement('nav');
+  const ul = document.createElement('ul');
+  ul.classList.add('nav');
+
+  navItems.forEach((item) => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = `#${item.label.toLowerCase().replace(/\s+/g, '-')}`;
+    a.textContent = item.label;
+    a.classList.add('nav-item');
+    a.setAttribute('aria-label', `Navigate to ${item.label}`);
+    li.appendChild(a);
+
+    if (item.subItems.length > 0) {
+      const dropdownUl = document.createElement('ul');
+      dropdownUl.classList.add('dropdown');
+      item.subItems.forEach((sub) => {
+        const subLi = document.createElement('li');
+        const subA = document.createElement('a');
+        subA.href = `#${sub.toLowerCase().replace(/\s+/g, '-')}`;
+        subA.textContent = sub;
+        subA.classList.add('nav-item');
+        subA.setAttribute('aria-label', `Navigate to ${sub}`);
+        subLi.appendChild(subA);
+        dropdownUl.appendChild(subLi);
+      });
+      li.appendChild(dropdownUl);
+    }
+
+    ul.appendChild(li);
+  });
+
+  nav.appendChild(ul);
+  return nav;
+}
+
+/**
  * Decorates the aashirvaad-header block.
  * @param {Element} block The header block element.
  */
@@ -26,8 +100,16 @@ export default async function decorate(block) {
   const config = readBlockConfig(block);
 
   // Extract config values with defaults
-  const logoUrl = config['logo-url'] || `${window.hlx.codeBasePath}/icons/aashirvaad.png`;
-  const navItems = config['nav-items'] ? config['nav-items'].split('|').map(item => item.trim()) : ['Our Products', 'Our Story', 'Recipe', 'Blogs', 'FAQs'];
+  let logoUrl = config['logo-url'];
+  if (logoUrl && typeof logoUrl !== 'string') {
+    // If pasted image, extract src
+    const img = block.querySelector('img');
+    if (img) logoUrl = img.src;
+  }
+  logoUrl = logoUrl || `${window.hlx.codeBasePath}/icons/aashirvaad-logo.png`;
+
+  const navStructure = config['nav-structure'];
+  const navItems = parseNavStructure(navStructure);
   const searchEnabled = config['search-enabled'] !== 'false';
   const isFixed = config.fixed === 'true';
 
@@ -48,21 +130,8 @@ export default async function decorate(block) {
   logoImg.classList.add('logo');
   header.appendChild(logoImg);
 
-  // Create navigation
-  const nav = document.createElement('nav');
-  const ul = document.createElement('ul');
-  ul.classList.add('nav');
-  navItems.forEach((item) => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = `#${item.toLowerCase().replace(/\s+/g, '-')}`;
-    a.textContent = item;
-    a.classList.add('nav-item');
-    a.setAttribute('aria-label', `Navigate to ${item}`);
-    li.appendChild(a);
-    ul.appendChild(li);
-  });
-  nav.appendChild(ul);
+  // Create navigation with dropdowns
+  const nav = buildNav(navItems);
   header.appendChild(nav);
 
   // Create search icon if enabled
@@ -82,6 +151,16 @@ export default async function decorate(block) {
   // Append header to block
   block.appendChild(header);
 
+  // Add keyboard support for dropdowns (basic)
+  const topNavItems = header.querySelectorAll('.nav > li');
+  topNavItems.forEach((li) => {
+    const link = li.querySelector('a');
+    if (li.querySelector('.dropdown')) {
+      link.addEventListener('focus', () => li.classList.add('focused'));
+      link.addEventListener('blur', () => li.classList.remove('focused'));
+    }
+  });
+
   // Log decoration complete
-  console.debug('Aashirvaad header decorated');
+  console.debug('Aashirvaad header with dropdowns decorated');
 }

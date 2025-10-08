@@ -1,4 +1,18 @@
-.aashirvaad-header {
+/* aashirvaad-header.css */
+
+/*
+ * Copyright 2025 Franklin. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+ .aashirvaad-header {
   background-color: #ff0000;
   color: white;
   display: flex;
@@ -28,6 +42,11 @@
   margin: 0;
   padding: 0;
   gap: 30px;
+  position: relative;
+}
+
+.aashirvaad-header .nav > li {
+  position: relative;
 }
 
 .aashirvaad-header .nav-item {
@@ -36,10 +55,46 @@
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  display: block;
+  padding: 10px 0;
 }
 
 .aashirvaad-header .nav-item:hover {
   text-decoration: underline;
+}
+
+.aashirvaad-header .dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ffcccc; /* Light red for dropdown */
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+}
+
+.aashirvaad-header .nav > li:hover .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.aashirvaad-header .dropdown .nav-item {
+  padding: 8px 20px;
+  font-size: 14px;
+  border-bottom: 1px solid #ff9999;
+}
+
+.aashirvaad-header .dropdown .nav-item:hover {
+  background-color: #ff9999;
+  text-decoration: none;
 }
 
 .aashirvaad-header .search-icon {
@@ -56,10 +111,27 @@
 /* Responsive */
 @media (max-width: 768px) {
   .aashirvaad-header .nav {
-    display: none;
+    display: none; /* Hide full nav; add hamburger toggle in JS if needed */
+  }
+
+  .aashirvaad-header .dropdown {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    background: transparent;
   }
 
   .aashirvaad-header .search-icon {
     display: block;
   }
+}
+
+/* Add to aashirvaad-header.css for keyboard focus (append to end) */
+
+.aashirvaad-header .nav > li.focused .dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
