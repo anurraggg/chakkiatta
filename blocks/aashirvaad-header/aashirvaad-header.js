@@ -15,11 +15,41 @@
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/extensions */
 
-import { readBlockConfig } from '../../scripts/aem.js';
+import { readBlockConfig } from '../../scripts/aem.js'; // Kept for potential future use, but not for block config
+
+/**
+ * Parses the block's table rows into a config object.
+ * Skips the first row (block name), extracts key/value pairs from subsequent rows.
+ * Handles multi-line text and pasted images.
+ * @param {Element} block The block element with child .row divs.
+ * @returns {Object} Config object with keys like 'logo-url', 'nav-structure'.
+ */
+function parseBlockConfig(block) {
+  const config = {};
+  const rows = [...block.querySelectorAll(':scope > div')]; // Each table row is a <div class="row">
+  for (let i = 1; i < rows.length; i += 1) { // Start at i=1 to skip block name row (i=0)
+    const row = rows[i];
+    const cols = [...row.querySelectorAll(':scope > div')]; // Each <div class="col">
+    if (cols.length >= 2) {
+      const keyCell = cols[0];
+      const valueCell = cols[1];
+      const key = keyCell.querySelector('p')?.textContent?.trim().toLowerCase();
+      let value = valueCell.querySelector('p')?.textContent?.trim() || '';
+      const img = valueCell.querySelector('img');
+      if (img) {
+        value = img.src; // Extract src from pasted PNG
+      }
+      if (key && value) {
+        config[key] = value;
+      }
+    }
+  }
+  return config;
+}
 
 /**
  * Parses the nav-structure config into a hierarchical array.
- * @param {string} navStructure The raw nav-structure string.
+ * @param {string} navStructure The raw nav-structure string (with \n for lines).
  * @returns {Array} Array of nav items, each with optional sub-items.
  */
 function parseNavStructure(navStructure) {
@@ -33,13 +63,13 @@ function parseNavStructure(navStructure) {
     ];
   }
 
-  const lines = navStructure.split('\n').map(line => line.trim()).filter(line => line);
+  const lines = navStructure.split('\n').map((line) => line.trim()).filter((line) => line);
   const navItems = [];
 
   lines.forEach((line) => {
     if (line.includes(':')) {
       const [parent, subsStr] = line.split(':', 2);
-      const subItems = subsStr ? subsStr.split('|').map(sub => sub.trim()).filter(sub => sub) : [];
+      const subItems = subsStr ? subsStr.split('|').map((sub) => sub.trim()).filter((sub) => sub) : [];
       navItems.push({ label: parent.trim(), subItems });
     } else {
       navItems.push({ label: line.trim(), subItems: [] });
@@ -96,24 +126,17 @@ function buildNav(navItems) {
  * @param {Element} block The header block element.
  */
 export default async function decorate(block) {
-  // Read block configuration
-  const config = readBlockConfig(block);
+  // Parse config from table rows
+  const config = parseBlockConfig(block);
 
   // Extract config values with defaults
-  let logoUrl = config['logo-url'];
-  if (logoUrl && typeof logoUrl !== 'string') {
-    // If pasted image, extract src
-    const img = block.querySelector('img');
-    if (img) logoUrl = img.src;
-  }
-  logoUrl = logoUrl || `${window.hlx.codeBasePath}/icons/aashirvaad-logo.png`;
-
+  let logoUrl = config['logo-url'] || `${window.hlx.codeBasePath}/icons/aashirvaad-logo.svg`;
   const navStructure = config['nav-structure'];
   const navItems = parseNavStructure(navStructure);
   const searchEnabled = config['search-enabled'] !== 'false';
   const isFixed = config.fixed === 'true';
 
-  // Clear existing content
+  // Clear existing content (table rows)
   block.innerHTML = '';
 
   // Create header element
