@@ -72,10 +72,10 @@ function parseNavStructure(navStructure) {
     console.log('parseNavStructure: Using defaults');
     return [
       { label: 'Our Products', subItems: ['Atta', 'Salt', 'Organic', 'Bensan', 'Millets', 'Vermicelli', 'Rava', 'Naans & Parathas'] },
-      { label: 'Our Story' },
-      { label: 'Recipe' },
-      { label: 'Blogs' },
-      { label: 'FAQs' }
+      { label: 'Our Story', subItems: [] },
+      { label: 'Recipe', subItems: [] },
+      { label: 'Blogs', subItems: [] },
+      { label: 'FAQs', subItems: [] }
     ];
   }
 
@@ -119,7 +119,7 @@ function buildNav(navItems) {
     a.setAttribute('aria-label', `Navigate to ${item.label}`);
     li.appendChild(a);
 
-    if (item.subItems.length > 0) {
+    if (item.subItems && item.subItems.length > 0) {
       const dropdownUl = document.createElement('ul');
       dropdownUl.classList.add('dropdown');
       item.subItems.forEach((sub) => {
@@ -154,7 +154,7 @@ export default async function decorate(block) {
   const config = parseBlockConfig(block);
 
   // Extract config values with defaults
-  let logoUrl = config['logo-url'] || `${window.hlx.codeBasePath}/icons/aashirvaad-logo.png`;
+  let logoUrl = config['logo-url'] || `${window.hlx.codeBasePath}/icons/aashirvaad-logo.svg`;
   console.log('decorate: Logo URL', logoUrl); // Log logo
   const navStructure = config['nav-structure'];
   const navItems = parseNavStructure(navStructure);
