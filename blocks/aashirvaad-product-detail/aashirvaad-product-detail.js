@@ -18,12 +18,12 @@
 /**
  * Parses the block's table rows into a config object.
  * Skips the first row (block name), extracts key/value pairs from subsequent rows.
- * Handles multi-line text (aggregates <p> children) and pasted images.
+ * Uses innerHTML for multi-line to preserve <br> from Google Docs export.
  * @param {Element} block The block element with child divs.
  * @returns {Object} Config object.
  */
  function parseBlockConfig(block) {
-    console.log('parseBlockConfig: Starting parse'); // Debug
+    console.log('parseBlockConfig: Starting parse');
     const config = {};
     const rows = [...block.children];
     console.log('parseBlockConfig: Found rows', rows.length);
@@ -34,20 +34,17 @@
         const keyCell = cols[0];
         const valueCell = cols[1];
         const key = keyCell.querySelector('p')?.textContent?.trim().toLowerCase();
-        let value = '';
-        // Enhanced: Aggregate all <p> in value cell for multi-line
-        const ps = [...valueCell.querySelectorAll('p')];
-        if (ps.length > 0) {
-          value = ps.map(p => p.textContent.trim()).join('\n'); // Join with \n
-        } else {
-          value = valueCell.querySelector('p')?.textContent?.trim() || '';
-        }
+        let value = valueCell.innerHTML.trim(); // Use innerHTML to preserve <br> or structure
         const img = valueCell.querySelector('img');
         if (img) {
           value = img.src;
           console.log('parseBlockConfig: Image src', value);
         }
-        console.log('parseBlockConfig: Key/Value', key, '=>', value.substring(0, 50) + '...'); // Truncated log
+        // Clean up value if not image (remove extra tags/whitespace)
+        if (!img && value) {
+          value = value.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '').trim(); // Strip tags, keep \n
+        }
+        console.log('parseBlockConfig: Key/Value', key, '=>', value.substring(0, 50) + '...');
         if (key && value) {
           config[key] = value;
         }
@@ -82,7 +79,7 @@
    * @returns {Element} DL element.
    */
   function buildNutrition(nutrition) {
-    if (!nutrition) return document.createElement('div');
+    if (!nutrition) return null; // Return null if empty—no "Energy" ghost
     const dl = document.createElement('dl');
     dl.classList.add('nutrition');
     nutrition.split('|').forEach((fact) => {
@@ -96,7 +93,7 @@
         dl.appendChild(dd);
       }
     });
-    return dl;
+    return dl.children.length > 0 ? dl : null;
   }
   
   /**
@@ -126,6 +123,8 @@
       img.classList.add('product-image');
       img.loading = 'lazy';
       container.appendChild(img);
+    } else {
+      console.log('decorate: No image URL—add "image" row with pasted PNG');
     }
   
     // Info
@@ -140,9 +139,9 @@
     if (description) {
       const p = document.createElement('p');
       p.classList.add('product-description');
-      // Enhanced: Split on \n and wrap in <span> for better flow, or use <br>
-      p.innerHTML = description.replace(/\n/g, '<br>');
+      p.innerHTML = description.replace(/\n/g, '<br>'); // Re-apply <br> for lines
       info.appendChild(p);
+      console.log('decorate: Description rendered with breaks');
     }
   
     const readMore = document.createElement('a');
@@ -154,7 +153,7 @@
     info.appendChild(buildPackSizes(packSizes));
   
     const nutritionEl = buildNutrition(nutrition);
-    if (nutritionEl.children.length > 0) {
+    if (nutritionEl) {
       info.appendChild(nutritionEl);
     }
   
