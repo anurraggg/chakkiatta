@@ -1,0 +1,122 @@
+/* aashirvaad-product-detail.css */
+
+/*
+ * Copyright 2025 Franklin. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+ .aashirvaad-product-detail {
+    background-color: #fdf6e3;
+    padding: 40px 20px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .aashirvaad-product-detail .product-image {
+    flex: 1;
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .aashirvaad-product-detail .product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .aashirvaad-product-detail .product-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+  
+  .aashirvaad-product-detail .product-description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+    margin: 0;
+  }
+  
+  .aashirvaad-product-detail .read-more {
+    color: #ff0000;
+    text-decoration: none;
+    font-weight: bold;
+    align-self: flex-start;
+  }
+  
+  .aashirvaad-product-detail .read-more:hover {
+    text-decoration: underline;
+  }
+  
+  .aashirvaad-product-detail .pack-sizes {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .aashirvaad-product-detail .pack-sizes button {
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .aashirvaad-product-detail .pack-sizes button:hover {
+    background-color: #e60000; /* Slightly darker red for hover */
+    transform: translateY(-2px); /* Subtle lift effect */
+    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3); /* Red glow shadow */
+  }
+  
+  .aashirvaad-product-detail .nutrition {
+    margin-top: 20px;
+  }
+  
+  .aashirvaad-product-detail .nutrition dt {
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+  }
+  
+  .aashirvaad-product-detail .nutrition dd {
+    color: #666;
+    margin: 0 0 10px 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .aashirvaad-product-detail {
+      flex-direction: column;
+      padding: 20px 10px;
+      gap: 20px;
+    }
+  
+    .aashirvaad-product-detail .product-image {
+      max-width: 100%;
+    }
+  
+    .aashirvaad-product-detail .pack-sizes {
+      justify-content: center;
+    }
+  
+    .aashirvaad-product-detail .pack-sizes button:hover {
+      transform: none; /* Disable lift on mobile for touch */
+    }
+  }
