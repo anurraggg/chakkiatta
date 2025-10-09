@@ -37,6 +37,10 @@ export default async function decorate(block) {
           imgContainer.style.flex = '0 0 400px'; // Fixed width for each image
           imgContainer.appendChild(images[index]);
           slide.appendChild(imgContainer);
+        } else {
+          const emptyDiv = document.createElement('div');
+          emptyDiv.style.flex = '0 0 400px'; // Placeholder for empty space
+          slide.appendChild(emptyDiv);
         }
       }
       imagesDiv.appendChild(slide);

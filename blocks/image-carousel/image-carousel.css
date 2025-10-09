@@ -12,9 +12,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 1200px;
+    max-width: 1280px; /* Increased to accommodate 3 images + margins */
     margin: 0 auto;
     position: relative;
+    padding: 0 40px; /* Add padding to ensure buttons fit outside images */
   }
   
   .image-carousel .carousel-images {
@@ -27,6 +28,7 @@
     width: 100%;
     justify-content: center;
     flex-shrink: 0;
+    padding: 0 20px; /* Ensure space for buttons */
   }
   
   .image-carousel img {
@@ -42,11 +44,12 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    padding: 0 20px; /* Adjust padding to avoid overlap */
   }
   
   .image-carousel button {
