@@ -21,9 +21,30 @@ export default async function decorate(block) {
     container.classList.add('carousel-container');
     const imagesDiv = document.createElement('div');
     imagesDiv.classList.add('carousel-images');
-    imagesDiv.style.width = `${images.length * 440}px`; // 400px image + 40px total margin (20px each side)
-    imagesDiv.append(...images);
-    container.append(imagesDiv);
+    const imagesPerPage = 3;
+    const totalSlides = Math.ceil(images.length / imagesPerPage);
+    imagesDiv.style.width = `${totalSlides * 100}%`; // Full width for all slides
+    imagesDiv.style.display = 'flex';
+  
+    // Create slides with 3 images each
+    for (let i = 0; i < totalSlides; i++) {
+      const slide = document.createElement('div');
+      slide.style.width = `${100 / totalSlides}%`;
+      slide.style.display = 'flex';
+      slide.style.justifyContent = 'center';
+      for (let j = 0; j < imagesPerPage; j++) {
+        const index = i * imagesPerPage + j;
+        if (index < images.length) {
+          const imgContainer = document.createElement('div');
+          imgContainer.style.flex = '1 0 400px'; // Ensure consistent width
+          imgContainer.appendChild(images[index]);
+          slide.appendChild(imgContainer);
+        }
+      }
+      imagesDiv.appendChild(slide);
+    }
+  
+    container.appendChild(imagesDiv);
     const buttonsDiv = document.createElement('div');
     buttonsDiv.classList.add('buttons');
     const prevButton = document.createElement('button');
@@ -38,29 +59,23 @@ export default async function decorate(block) {
     block.classList.add('image-carousel');
   
     // Carousel logic
-    let currentIndex = 0;
-    const imagesPerPage = 3;
-    const totalPages = Math.ceil(images.length / imagesPerPage);
+    let currentSlide = 0;
   
     function updateCarousel() {
-      const offset = -currentIndex * (440 * imagesPerPage); // 400px image + 40px margin
-      imagesDiv.style.transform = `translateX(${offset}px)`;
-      prevButton.disabled = currentIndex === 0;
-      nextButton.disabled = currentIndex >= totalPages - 1;
+      const offset = -currentSlide * (100 / totalSlides);
+      imagesDiv.style.transform = `translateX(${offset}%)`;
+      prevButton.disabled = currentSlide === 0;
+      nextButton.disabled = currentSlide >= totalSlides - 1;
     }
   
     prevButton.addEventListener('click', () => {
-      if (currentIndex > 0) {
-        currentIndex -= 1;
-        updateCarousel();
-      }
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; // Loop back
+      updateCarousel();
     });
   
     nextButton.addEventListener('click', () => {
-      if (currentIndex < totalPages - 1) {
-        currentIndex += 1;
-        updateCarousel();
-      }
+      currentSlide = (currentSlide + 1) % totalSlides; // Loop to start
+      updateCarousel();
     });
   
     updateCarousel();
