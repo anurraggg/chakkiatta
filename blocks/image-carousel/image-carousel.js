@@ -17,18 +17,23 @@ export default async function decorate(block) {
     if (images.length === 0) return;
   
     // Structure the block
+    block.setAttribute('role', 'region');
+    block.setAttribute('aria-roledescription', 'Carousel');
+  
     const container = document.createElement('div');
     container.classList.add('carousel-container');
-    const imagesDiv = document.createElement('div');
-    imagesDiv.classList.add('carousel-images');
+    const slidesWrapper = document.createElement('div');
+    slidesWrapper.classList.add('carousel-slides');
     const imagesPerPage = 3;
     const totalSlides = Math.ceil(images.length / imagesPerPage);
-    imagesDiv.style.width = `${totalSlides * 100}%`; // Full width for all slides
+    slidesWrapper.style.width = `${totalSlides * 100}%`;
   
     // Create slides with 3 images each
     for (let i = 0; i < totalSlides; i++) {
       const slide = document.createElement('div');
-      slide.classList.add('slide');
+      slide.classList.add('carousel-slide');
+      slide.dataset.slideIndex = i;
+      slide.setAttribute('aria-hidden', i !== 0);
       slide.style.width = `${100 / totalSlides}%`;
       for (let j = 0; j < imagesPerPage; j++) {
         const index = i * imagesPerPage + j;
@@ -43,19 +48,21 @@ export default async function decorate(block) {
           slide.appendChild(emptyDiv);
         }
       }
-      imagesDiv.appendChild(slide);
+      slidesWrapper.appendChild(slide);
     }
   
-    container.appendChild(imagesDiv);
-    const buttonsDiv = document.createElement('div');
-    buttonsDiv.classList.add('buttons');
+    container.appendChild(slidesWrapper);
+    const navButtons = document.createElement('div');
+    navButtons.classList.add('carousel-navigation-buttons');
     const prevButton = document.createElement('button');
+    prevButton.classList.add('slide-prev');
     prevButton.textContent = 'Previous';
     const nextButton = document.createElement('button');
+    nextButton.classList.add('slide-next');
     nextButton.textContent = 'Next';
-    buttonsDiv.append(prevButton, nextButton);
+    navButtons.append(prevButton, nextButton);
     block.innerHTML = '';
-    block.append(container, buttonsDiv);
+    block.append(container, navButtons);
   
     // Add classes and structure
     block.classList.add('image-carousel');
@@ -63,22 +70,29 @@ export default async function decorate(block) {
     // Carousel logic
     let currentSlide = 0;
   
-    function updateCarousel() {
-      const offset = -currentSlide * (100 / totalSlides);
-      imagesDiv.style.transform = `translateX(${offset}%)`;
+    function updateActiveSlide() {
+      const slides = block.querySelectorAll('.carousel-slide');
+      slides.forEach((slide, idx) => {
+        slide.setAttribute('aria-hidden', idx !== currentSlide);
+      });
       prevButton.disabled = currentSlide === 0;
       nextButton.disabled = currentSlide >= totalSlides - 1;
     }
   
-    prevButton.addEventListener('click', () => {
-      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides; // Loop back
-      updateCarousel();
-    });
+    function showSlide(slideIndex) {
+      currentSlide = (slideIndex % totalSlides + totalSlides) % totalSlides; // Ensure looping
+      const offset = -currentSlide * (100 / totalSlides);
+      slidesWrapper.style.transform = `translateX(${offset}%)`;
+      updateActiveSlide();
+      slidesWrapper.scrollTo({
+        left: slidesWrapper.querySelector(`.carousel-slide[data-slide-index="${currentSlide}"]`).offsetLeft,
+        behavior: 'smooth'
+      });
+    }
   
-    nextButton.addEventListener('click', () => {
-      currentSlide = (currentSlide + 1) % totalSlides; // Loop to start
-      updateCarousel();
-    });
+    prevButton.addEventListener('click', () => showSlide(currentSlide - 1));
+    nextButton.addEventListener('click', () => showSlide(currentSlide + 1));
   
-    updateCarousel();
+    // Initial update
+    updateActiveSlide();
   }
