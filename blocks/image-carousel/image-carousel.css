@@ -1,16 +1,20 @@
 .image-carousel {
     position: relative;
-    padding: 40px;
+    padding: 40px 0;
     background-color: #1a1a1a;
-    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
     color: #fff;
+    overflow: hidden;
   }
   
   .image-carousel .carousel-container {
     display: flex;
-    overflow: hidden;
     justify-content: center;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
   }
   
   .image-carousel .carousel-images {
@@ -19,29 +23,39 @@
   }
   
   .image-carousel img {
-    width: 300px;
-    height: 200px;
+    width: 400px;
+    height: 300px;
     object-fit: cover;
-    margin: 0 10px;
+    margin: 0 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
   }
   
   .image-carousel .buttons {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    position: relative;
+    z-index: 1;
   }
   
   .image-carousel button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     margin: 0 10px;
-    background-color: #f5e8c7;
+    background-color: #ff0000;
     border: none;
     cursor: pointer;
     border-radius: 5px;
-    color: #1a1a1a;
+    color: #fff;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .image-carousel button:hover {
+    background-color: #cc0000;
   }
   
   .image-carousel button:disabled {
-    background-color: #ccc;
+    background-color: #666;
     cursor: not-allowed;
   }

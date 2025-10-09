@@ -9,7 +9,7 @@ export default async function decorate(block) {
       const match = row.textContent.match(/image\d*\s+(.*)/);
       if (match) {
         const img = document.createElement('img');
-        img.src = match[1].trim() || 'https://via.placeholder.com/300x200';
+        img.src = match[1].trim() || 'https://via.placeholder.com/400x300';
         images.push(img);
       }
     });
@@ -21,7 +21,7 @@ export default async function decorate(block) {
     container.classList.add('carousel-container');
     const imagesDiv = document.createElement('div');
     imagesDiv.classList.add('carousel-images');
-    imagesDiv.style.width = `${images.length * 320}px`; // 300px image + 20px margin
+    imagesDiv.style.width = `${images.length * 440}px`; // 400px image + 40px total margin (20px each side)
     imagesDiv.append(...images);
     container.append(imagesDiv);
     const buttonsDiv = document.createElement('div');
@@ -43,7 +43,7 @@ export default async function decorate(block) {
     const totalPages = Math.ceil(images.length / imagesPerPage);
   
     function updateCarousel() {
-      const offset = -currentIndex * (320 * imagesPerPage);
+      const offset = -currentIndex * (440 * imagesPerPage); // 400px image + 40px margin
       imagesDiv.style.transform = `translateX(${offset}px)`;
       prevButton.disabled = currentIndex === 0;
       nextButton.disabled = currentIndex >= totalPages - 1;
