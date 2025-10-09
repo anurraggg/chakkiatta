@@ -240,6 +240,7 @@ main > .section > div {
 
 main > .section:first-of-type {
   margin-top: 0;
+  background: #fff6e3;
 }
 
 @media (width >= 900px) {
