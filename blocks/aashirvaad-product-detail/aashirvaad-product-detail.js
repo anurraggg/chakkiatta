@@ -5,26 +5,27 @@ export default async function decorate(block) {
   
     // Extract content from rows
     const [imageRow, titleRow, descriptionRow, packSizesRow, nutritionRow] = rows;
-    const img = imageRow.querySelector('img');
-    const title = titleRow.querySelector('h2') || document.createElement('h2');
-    title.textContent = titleRow.textContent.trim();
+    const img = imageRow.querySelector('img') || document.createElement('img');
+    if (!img.src) img.src = imageRow.textContent.trim() || 'https://via.placeholder.com/300x400';
+    const title = document.createElement('h2');
+    title.textContent = titleRow.textContent.replace('title ', '').trim();
     const description = document.createElement('p');
     description.classList.add('description');
-    description.textContent = descriptionRow.textContent.trim() || 'Description not provided.';
+    description.textContent = descriptionRow.textContent.replace('description ', '').trim() || 'Description not provided.';
     const packSizes = document.createElement('p');
     packSizes.classList.add('pack-sizes');
-    packSizes.innerHTML = packSizesRow.textContent.trim().replace(/\|/g, ' <button>$&</button> ');
+    const sizes = packSizesRow.textContent.replace('pack-sizes ', '').trim().split('|');
+    packSizes.innerHTML = sizes.map(size => `<button>${size.trim()}</button>`).join(' ');
     const nutrition = document.createElement('p');
     nutrition.classList.add('nutrition');
-    nutrition.textContent = nutritionRow.textContent.trim() || 'Nutrition not provided.';
+    nutrition.textContent = nutritionRow.textContent.replace('nutrition ', '').trim() || 'Nutrition not provided.';
   
     // Structure the block
     const detailsDiv = document.createElement('div');
     detailsDiv.classList.add('product-details');
     detailsDiv.append(title, description, packSizes, nutrition);
     block.innerHTML = '';
-    if (img) block.append(img);
-    block.append(detailsDiv);
+    block.append(img, detailsDiv);
   
     // Add classes and structure
     block.classList.add('aashirvaad-product-detail');
@@ -37,4 +38,8 @@ export default async function decorate(block) {
         button.classList.add('active');
       });
     });
+  
+    // Set initial active button (e.g., 10KG as per your output)
+    const initialActive = packSizes.querySelector('button:last-child');
+    if (initialActive) initialActive.classList.add('active');
   }

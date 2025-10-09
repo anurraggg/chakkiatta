@@ -1,6 +1,6 @@
 .aashirvaad-product-detail {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 20px;
     background-color: #fff5e6;
     max-width: 1200px;
@@ -36,15 +36,17 @@
   .product-details p.pack-sizes button {
     padding: 10px 20px;
     margin-right: 10px;
-    border: none;
-    background-color: #ccc;
+    border: 1px solid #ccc;
+    background-color: #fff;
     cursor: pointer;
     border-radius: 5px;
+    transition: background-color 0.3s;
   }
   
   .product-details p.pack-sizes button.active {
     background-color: #000;
     color: #fff;
+    border-color: #000;
   }
   
   .product-details p.nutrition {
