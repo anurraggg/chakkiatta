@@ -24,19 +24,17 @@ export default async function decorate(block) {
     const imagesPerPage = 3;
     const totalSlides = Math.ceil(images.length / imagesPerPage);
     imagesDiv.style.width = `${totalSlides * 100}%`; // Full width for all slides
-    imagesDiv.style.display = 'flex';
   
     // Create slides with 3 images each
     for (let i = 0; i < totalSlides; i++) {
       const slide = document.createElement('div');
+      slide.classList.add('slide');
       slide.style.width = `${100 / totalSlides}%`;
-      slide.style.display = 'flex';
-      slide.style.justifyContent = 'center';
       for (let j = 0; j < imagesPerPage; j++) {
         const index = i * imagesPerPage + j;
         if (index < images.length) {
           const imgContainer = document.createElement('div');
-          imgContainer.style.flex = '1 0 400px'; // Ensure consistent width
+          imgContainer.style.flex = '0 0 400px'; // Fixed width for each image
           imgContainer.appendChild(images[index]);
           slide.appendChild(imgContainer);
         }
