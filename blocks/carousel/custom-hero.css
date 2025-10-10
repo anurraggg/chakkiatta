@@ -1,0 +1,106 @@
+/* blocks/custom-hero/custom-hero.css */
+
+.custom-hero {
+    /* Use a container with max-width and padding for the whole block */
+    max-width: var(--page-width); /* Assuming a CSS variable for page width */
+    margin: 0 auto;
+    padding: 40px var(--spacing-x-padding); /* Adjust padding as needed */
+    display: flex;
+    gap: 40px;
+    align-items: center; /* Vertically align items */
+  }
+  
+  /* Ensure a two-column layout */
+  .custom-hero > div {
+    flex: 1; /* Both columns take equal space */
+    min-width: 0; /* Prevents overflow */
+  }
+  
+  /* --- Content (Left) Side Styling --- */
+  
+  .custom-hero .custom-hero-content {
+    /* Set the content container to stack its children */
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Spacing between title, text, and buttons */
+  }
+  
+  /* Styling for the main headline (H1 or H2 usually) */
+  .custom-hero .custom-hero-content h1,
+  .custom-hero .custom-hero-content h2 {
+    font-size: var(--heading-font-size-xl);
+    line-height: 1.1;
+    margin-top: 0;
+    margin-bottom: 8px; /* Slight extra space under the title */
+  }
+  
+  /* Styling for the introductory paragraph */
+  .custom-hero .custom-hero-content p:not(.button-container) {
+    font-size: var(--body-font-size-l);
+    line-height: 1.5;
+  }
+  
+  /* Style the container for buttons */
+  .custom-hero .button-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 16px;
+  }
+  
+  /* Generic button styling (ensure your main CSS defines --color-primary) */
+  .custom-hero .button {
+    padding: 12px 24px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  
+  /* Primary button style */
+  .custom-hero .button.primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+  }
+  
+  /* Secondary/Outline button style */
+  .custom-hero .button.secondary {
+    background-color: transparent;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  
+  /* --- Image (Right) Side Styling --- */
+  
+  .custom-hero .custom-hero-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* Optional: Add a rounded corner or shadow if visible in the image */
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* --- Mobile / Responsiveness --- */
+  
+  @media (max-width: 900px) {
+    .custom-hero {
+      flex-direction: column; /* Stack columns vertically on smaller screens */
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    
+    /* On mobile, place the image above the text */
+    .custom-hero .custom-hero-image {
+      order: -1;
+    }
+    
+    .custom-hero .custom-hero-content {
+      text-align: center;
+      align-items: center; /* Center-align content elements */
+    }
+  
+    .custom-hero .button-container {
+      justify-content: center;
+    }
+  }
