@@ -33,10 +33,10 @@
   }
   
   .image-carousel img {
-    width: 400px;
+    width: 280px;
     height: 300px;
     object-fit: cover;
-    margin: 0 20px;
+    margin: 0 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
   }
