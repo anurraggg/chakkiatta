@@ -56,10 +56,10 @@ export default async function decorate(block) {
     navButtons.classList.add('carousel-navigation-buttons');
     const prevButton = document.createElement('button');
     prevButton.classList.add('slide-prev');
-    prevButton.textContent = 'Previous';
+    prevButton.textContent = '<<';
     const nextButton = document.createElement('button');
     nextButton.classList.add('slide-next');
-    nextButton.textContent = 'Next';
+    nextButton.textContent = '>>';
     navButtons.append(prevButton, nextButton);
     block.innerHTML = '';
     block.append(container, navButtons);
