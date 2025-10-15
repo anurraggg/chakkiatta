@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 export default function decorate(block) {
     const rows = block.querySelectorAll(':scope > div');
-    if (rows.length < 3) return; // Need at least 3 videos
+    if (rows.length < 2) return; // Need header + at least 1 video
   
     // Extract video data from table (assume 2 columns: Title | YouTube URL)
     const videos = [];
@@ -14,13 +14,18 @@ export default function decorate(block) {
         const videoId = extractYouTubeId(url); // Helper to get ID
         if (videoId) {
           videos.push({ title, id: videoId });
+        } else {
+          console.warn(`Invalid YouTube URL in row ${i + 1}: ${url} - Skipping. Use full 'watch?v=11charID' link.`);
         }
       }
     });
   
-    if (videos.length < 3) return;
+    if (videos.length === 0) {
+      console.error('No valid videos found. Check table URLs.');
+      return;
+    }
   
-    // Build structure
+    // Render only available videos (dynamic count, up to 3 or more)
     block.classList.add('video-gallery');
   
     const mainContainer = document.createElement('div');
@@ -44,8 +49,10 @@ export default function decorate(block) {
       img.src = `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`;
       img.alt = video.title;
       img.loading = 'lazy';
+      img.onerror = () => { img.src = 'https://via.placeholder.com/300x120?text=No+Thumb'; }; // Soft fallback
   
-      // Play overlay
+      // Play overlay (position relative for absolute child)
+      thumb.style.position = 'relative';
       const overlay = document.createElement('div');
       overlay.classList.add('play-overlay');
       overlay.innerHTML = '▶';
