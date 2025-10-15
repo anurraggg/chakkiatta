@@ -1,0 +1,89 @@
+.image-slider {
+    position: relative;
+    padding: 40px 0;
+    background-color: #e3d8cc;
+    width: 100%;
+    margin: 0 auto;
+    color: #fff;
+    overflow: hidden;
+  }
+  
+  .image-slider .slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1300px; /* 400px * 3 + margins/padding */
+    margin: 0 auto;
+    position: relative;
+    padding: 0 60px; /* Space for buttons */
+  }
+  
+  .image-slider .slider-slides {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    transition: transform 0.5s ease; /* Smooth infinite sliding */
+  }
+  
+  .image-slider .slider-slide {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 100%;
+    padding: 0 20px;
+  }
+  
+  .image-slider .slider-slide img {
+    width: 100%; /* Fill container fully */
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex: 0 0 400px; /* Fixed width per image container */
+  }
+  
+  .image-slider .slider-navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 10px;
+  }
+  
+  .image-slider button {
+    padding: 12px 25px;
+    background-color: #ff0000;
+    border: none;
+    cursor: pointer;
+    border-radius: 60px;
+    color: #fff;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    z-index: 1;
+  }
+  
+  .image-slider button:hover:not(:disabled) {
+    background-color: #cc0000;
+  }
+  
+  .image-slider button:disabled {
+    background-color: #999; /* Gray for disabled */
+    cursor: not-allowed;
+  }
+  
+  /* Mobile: 1 image per slide */
+  @media (max-width: 768px) {
+    .image-slider .slider-slide {
+      padding: 0 10px;
+    }
+    .image-slider .slider-slide img {
+      flex: 0 0 300px; /* Smaller on mobile */
+      height: 200px;
+    }
+    .image-slider .slider-container {
+      padding: 0 40px;
+    }
+  }
