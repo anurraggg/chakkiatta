@@ -3,11 +3,11 @@ export default function decorate(block) {
     const rows = block.querySelectorAll(':scope > div');
     if (rows.length < 2) return; // Need header + at least 1 video
   
-    // Extract video data from table (assume 2 columns: Title | YouTube URL)
+    // Extract video data from table (Helix: rows as divs, cells as nested divs)
     const videos = [];
     rows.forEach((row, i) => {
       if (i === 0) return; // Skip header
-      const cells = row.querySelectorAll('td, th');
+      const cells = row.querySelectorAll(':scope > div'); // Parse child divs as cells
       if (cells.length >= 2) {
         const title = cells[0].textContent.trim();
         const url = cells[1].textContent.trim();
@@ -21,11 +21,11 @@ export default function decorate(block) {
     });
   
     if (videos.length === 0) {
-      console.error('No valid videos found. Check table URLs.');
+      console.error('No valid videos found. Check table structure/URLs.');
       return;
     }
   
-    // Render only available videos (dynamic count, up to 3 or more)
+    // Render only available videos (dynamic count)
     block.classList.add('video-gallery');
   
     const mainContainer = document.createElement('div');
@@ -44,14 +44,14 @@ export default function decorate(block) {
       thumb.classList.add('thumbnail');
       if (i === 0) thumb.classList.add('active');
   
-      // Thumbnail image (use YouTube thumbnail)
+      // Thumbnail image (YouTube preview)
       const img = document.createElement('img');
       img.src = `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`;
       img.alt = video.title;
       img.loading = 'lazy';
-      img.onerror = () => { img.src = 'https://via.placeholder.com/300x120?text=No+Thumb'; }; // Soft fallback
+      img.onerror = () => { img.src = 'https://via.placeholder.com/300x120?text=No+Thumb'; };
   
-      // Play overlay (position relative for absolute child)
+      // Play overlay
       thumb.style.position = 'relative';
       const overlay = document.createElement('div');
       overlay.classList.add('play-overlay');
