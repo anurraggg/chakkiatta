@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 export default function decorate(block) {
     const rows = block.querySelectorAll(':scope > div');
     if (rows.length < 2) return; // Need header + at least 1 video
@@ -69,6 +68,12 @@ export default function decorate(block) {
   
     block.innerHTML = '';
     block.append(mainContainer, thumbsContainer);
+  
+    // Align main video height to thumbnails (after DOM render)
+    requestAnimationFrame(() => {
+      const thumbsHeight = thumbsContainer.offsetHeight;
+      mainIframe.style.height = `${thumbsHeight}px`; // Match exactly
+    });
   }
   
   // Helper: Extract YouTube ID from URL
