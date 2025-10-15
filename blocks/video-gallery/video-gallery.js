@@ -38,6 +38,7 @@ export default function decorate(block) {
   
     const thumbsContainer = document.createElement('div');
     thumbsContainer.classList.add('thumbnails');
+    // No class addition needed—vertical scroll is always enabled via CSS max-height
   
     videos.forEach((video, i) => {
       const thumb = document.createElement('div');
