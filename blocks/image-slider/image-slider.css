@@ -12,33 +12,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 1300px; /* 400px * 3 + margins/padding */
+    max-width: 1300px;
     margin: 0 auto;
     position: relative;
     padding: 0 60px; /* Space for buttons */
   }
   
-  .image-slider .slider-slides {
+  .image-slider .slider-track {
     display: flex;
-    overflow: hidden;
-    width: 100%;
-    transition: transform 0.5s ease; /* Smooth infinite sliding */
+    transition: transform 0.5s ease; /* Smooth sliding */
+    will-change: transform; /* Perf hint */
   }
   
   .image-slider .slider-slide {
+    flex: 0 0 calc(108% / 3); /* 3 visible on desktop; JS overrides for responsive */
     display: flex;
     justify-content: center;
-    flex-shrink: 0;
-    width: 100%;
-    padding: 0 20px;
+    align-items: center;
+    padding: 0 10px; /* Minimal spacing */
+    box-sizing: border-box;
   }
   
   .image-slider .slider-slide img {
-    width: 100%; /* Fill container fully */
+    width: 100%;
     height: 300px;
     object-fit: cover;
     border-radius: 8px;
-    flex: 0 0 400px; /* Fixed width per image container */
   }
   
   .image-slider .slider-navigation-buttons {
@@ -51,6 +50,7 @@
     top: 50%;
     transform: translateY(-50%);
     padding: 0 10px;
+    z-index: 2;
   }
   
   .image-slider button {
@@ -62,7 +62,6 @@
     color: #fff;
     font-weight: bold;
     transition: background-color 0.3s;
-    z-index: 1;
   }
   
   .image-slider button:hover:not(:disabled) {
@@ -70,17 +69,40 @@
   }
   
   .image-slider button:disabled {
-    background-color: #999; /* Gray for disabled */
+    background-color: #999;
     cursor: not-allowed;
   }
   
-  /* Mobile: 1 image per slide */
+  .image-slider .slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .image-slider .slider-dots li button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .image-slider .slider-dots li button.active {
+    background: #fff;
+  }
+  
+  /* Mobile: 1 slide */
   @media (max-width: 768px) {
     .image-slider .slider-slide {
-      padding: 0 10px;
+      flex: 0 0 100%;
+      padding: 0 5px;
     }
     .image-slider .slider-slide img {
-      flex: 0 0 300px; /* Smaller on mobile */
       height: 200px;
     }
     .image-slider .slider-container {
