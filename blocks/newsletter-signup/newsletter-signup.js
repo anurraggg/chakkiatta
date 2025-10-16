@@ -18,13 +18,13 @@
  }
  
  /**
-  * Builds the footer links using config.
+  * Builds the right links container using config data.
   * @param {Object} data - Block data from table
   * @returns {HTMLDivElement} Right links container
   */
  function buildRightLinks(data) {
    const linkConfig = [
-     { text: data['terms_text'] || 'Terms of use', href: '/terms-of-use' },
+     { text: data.terms_text || 'Terms of use', href: '/terms-of-use' },
      { text: data.privacy || 'Privacy Policy', href: '/privacy-policy' },
      { text: data.sitemap || 'Sitemap', href: '/sitemap' },
      { text: data.contact || 'Contact Us', href: '/contact' },
@@ -54,6 +54,7 @@
  function handleRegister(emailInput, checkbox) {
    if (checkbox.checked && emailInput.value.trim()) {
      console.log('Newsletter signup submitted:', { email: emailInput.value });
+     // Extend with actual API call here
      alert('Subscribed! (Demo - extend with API)');
    } else {
      alert('Please enter your email and agree to the terms.');
@@ -64,18 +65,21 @@
   * Decorates the newsletter signup block.
   * @param {Element} block - The block element
   */
- // eslint-disable-next-line no-unused-vars
  export default function decorate(block) {
    const rows = block.querySelectorAll(':scope > div');
-   if (rows.length < 2) return; // Need header + data rows
+   if (rows.length < 2) {
+     console.error('Insufficient rows in newsletter-signup table.');
+     return;
+   }
  
    // Extract data from table (assume columns: Type | Value)
    const data = {};
    rows.forEach((row, i) => {
-     if (i === 0) return; // Skip header
+     if (i === 0) return; // Skip header row if present
      const cells = row.querySelectorAll(':scope > div');
      if (cells.length >= 2) {
-       const type = cells[0].textContent.trim().toLowerCase();
+       // Normalize key: trim, lowercase, replace spaces with underscores
+       const type = cells[0].textContent.trim().toLowerCase().replace(/\s+/g, '_');
        const value = cells[1].textContent.trim();
        data[type] = value;
      }
@@ -83,7 +87,7 @@
  
    // Validate required data
    if (!data.logo1 || !data.fssai || !data.title_logo || !data.title_text) {
-     console.error('Missing required data: logo1, fssai, title_logo, title_text.');
+     console.error('Missing required data: logo1, fssai, title_logo, title_text. Parsed data:', data);
      return;
    }
  
@@ -147,7 +151,7 @@
  
    const label = document.createElement('label');
    label.htmlFor = 'terms-checkbox';
-   label.innerHTML = buildCheckboxLabel(data['terms_text'], data.privacy);
+   label.innerHTML = buildCheckboxLabel(data.terms_text, data.privacy);
    checkboxRow.appendChild(label);
    centerContainer.appendChild(checkboxRow);
  
