@@ -1,9 +1,4 @@
-/*
- * Newsletter Signup Block Styles
- * Block: newsletter-signup
- */
-
- .newsletter-signup {
+.newsletter-signup {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -26,8 +21,8 @@
 }
 
 .newsletter-signup .left-logos img {
-  height: 100px; /* Adjust as needed */
-  max-width: 190px;
+  height: 60px; /* Adjust as needed */
+  max-width: 150px;
   object-fit: contain;
 }
 
@@ -50,18 +45,6 @@
   font-size: 24px;
   font-weight: bold;
   margin: 0;
-  display: flex; /* Flex for baseline alignment */
-  align-items: baseline; /* Align bottoms/baselines */
-  gap: 5px; /* Space between image and text */
-}
-
-.newsletter-signup .title img {
-  height: 50px; /* Match JS height */
-  vertical-align: baseline; /* Fallback */
-}
-
-.newsletter-signup .title span {
-  margin-left: 0; /* Reset; use gap */
 }
 
 .newsletter-signup .email-input {
@@ -75,32 +58,14 @@
 
 .newsletter-signup .checkbox-row {
   display: flex;
-  align-items: flex-start; /* Top-align for multi-line label */
+  align-items: center;
   gap: 8px;
   font-size: 14px;
   opacity: 0.9;
-  width: 100%; /* Full width for wrapping */
-  flex-wrap: wrap; /* Allow wrap if needed */
 }
 
 .newsletter-signup .checkbox-row input[type="checkbox"] {
   width: auto;
-  flex-shrink: 0; /* Keep checkbox fixed */
-  align-self: flex-start;
-  margin-top: 2px; /* Slight nudge for top alignment */
-}
-
-.newsletter-signup .checkbox-row label {
-  flex: 1;
-  min-width: 0; /* Allow shrink for wrapping */
-  white-space: normal !important; /* Force wrapping, override any defaults */
-  line-height: 1.4; /* Spacing for 3 lines */
-  max-width: 100%; /* Constrain to container */
-  display: inline-block; /* Enable wrapping */
-  word-break: break-word; /* Break long words */
-  hyphens: auto; /* Hyphenate */
-  overflow-wrap: break-word; /* Modern word break */
-  width: calc(100% - 20px); /* Constrain width to force wrap */
 }
 
 .newsletter-signup .register-btn {
@@ -126,15 +91,9 @@
   white-space: nowrap;
 }
 
-.newsletter-signup .right-links a {
+.newsletter-signup .right-links span {
   color: white;
   opacity: 0.9;
-  text-decoration: none;
-}
-
-.newsletter-signup .right-links a:hover {
-  text-decoration: underline;
-  opacity: 1;
 }
 
 /* Mobile: Stack vertically */
@@ -154,19 +113,5 @@
   }
   .newsletter-signup .email-input {
     width: 100%;
-  }
-  .newsletter-signup .title {
-    flex-direction: column; /* Stack title on mobile */
-    align-items: center;
-    gap: 0;
-  }
-  .newsletter-signup .checkbox-row {
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-  }
-  .newsletter-signup .checkbox-row label {
-    text-align: center; /* Center on mobile */
-    width: 100%; /* Full width on mobile for wrap */
   }
 }

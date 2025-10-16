@@ -1,169 +1,114 @@
-/**
- * Newsletter Signup Block
- * Block: newsletter-signup
- */
+// eslint-disable-next-line no-unused-vars
+export default function decorate(block) {
+  const rows = block.querySelectorAll(':scope > div');
+  if (rows.length < 2) return; // Need header + data rows
 
- import { createOptimizedPicture } from '../aem.js';
+  // Extract data from table (assume columns: Type | Value)
+  const data = {};
+  rows.forEach((row, i) => {
+    if (i === 0) return; // Skip header
+    const cells = row.querySelectorAll(':scope > div');
+    if (cells.length >= 2) {
+      const type = cells[0].textContent.trim().toLowerCase();
+      const value = cells[1].textContent.trim();
+      data[type] = value;
+    }
+  });
 
- /**
-  * Builds the checkbox label HTML with links.
-  * @param {string} termsText - Terms link text
-  * @param {string} privacyText - Privacy link text
-  * @returns {string} HTML string for label
-  */
- function buildCheckboxLabel(termsText, privacyText) {
-   const termsLink = `<a href="/terms-of-use" target="_blank" rel="noopener">${termsText}</a>`;
-   const privacyLink = `<a href="/privacy-policy" target="_blank" rel="noopener">${privacyText}</a>`;
-   return `By clicking &ldquo;Register Now&rdquo;, you agree to ${termsLink} and ${privacyLink}, and to receive marketing emails from the Aashirvaad community`;
- }
- 
- /**
-  * Builds the right links container using config data.
-  * @param {Object} data - Block data from table
-  * @returns {HTMLDivElement} Right links container
-  */
- function buildRightLinks(data) {
-   const linkConfig = [
-     { text: data.terms_text || 'Terms of use', href: '/terms-of-use' },
-     { text: data.privacy || 'Privacy Policy', href: '/privacy-policy' },
-     { text: data.sitemap || 'Sitemap', href: '/sitemap' },
-     { text: data.contact || 'Contact Us', href: '/contact' },
-     { text: data.about || 'About Us', href: '/about' },
-   ];
- 
-   const rightContainer = document.createElement('div');
-   rightContainer.classList.add('right-links');
- 
-   linkConfig.forEach((link) => {
-     const a = document.createElement('a');
-     a.href = link.href;
-     a.target = '_blank';
-     a.rel = 'noopener';
-     a.textContent = link.text;
-     rightContainer.appendChild(a);
-   });
- 
-   return rightContainer;
- }
- 
- /**
-  * Handles button click for form submission.
-  * @param {HTMLInputElement} emailInput - Email input element
-  * @param {HTMLInputElement} checkbox - Checkbox element
-  */
- function handleRegister(emailInput, checkbox) {
-   if (checkbox.checked && emailInput.value.trim()) {
-     console.log('Newsletter signup submitted:', { email: emailInput.value });
-     // Extend with actual API call here
-     alert('Subscribed! (Demo - extend with API)');
-   } else {
-     alert('Please enter your email and agree to the terms.');
-   }
- }
- 
- /**
-  * Decorates the newsletter signup block.
-  * @param {Element} block - The block element
-  */
- export default function decorate(block) {
-   const rows = block.querySelectorAll(':scope > div');
-   if (rows.length < 2) {
-     console.error('Insufficient rows in newsletter-signup table.');
-     return;
-   }
- 
-   // Extract data from table (assume columns: Type | Value)
-   const data = {};
-   rows.forEach((row, i) => {
-     if (i === 0) return; // Skip header row if present
-     const cells = row.querySelectorAll(':scope > div');
-     if (cells.length >= 2) {
-       // Normalize key: trim, lowercase, replace spaces with underscores
-       const type = cells[0].textContent.trim().toLowerCase().replace(/\s+/g, '_');
-       const value = cells[1].textContent.trim();
-       data[type] = value;
-     }
-   });
- 
-   // Validate required data
-   if (!data.logo1 || !data.fssai || !data.title_logo || !data.title_text) {
-     console.error('Missing required data: logo1, fssai, title_logo, title_text. Parsed data:', data);
-     return;
-   }
- 
-   // Build structure
-   block.classList.add('newsletter-signup');
-   block.innerHTML = '';
- 
-   // Left: Logos
-   const leftContainer = document.createElement('div');
-   leftContainer.classList.add('left-logos');
- 
-   const logo1 = createOptimizedPicture(data.logo1, 'Aashirvaad Logo', false, [{ width: '190' }]);
-   logo1.querySelector('img').style.height = '100px';
-   leftContainer.appendChild(logo1);
- 
-   const fssaiContainer = document.createElement('div');
-   const fssaiImg = createOptimizedPicture(data.fssai, 'FSSAI License', false, [{ width: '80' }]);
-   fssaiImg.querySelector('img').style.height = 'auto';
-   fssaiContainer.appendChild(fssaiImg);
- 
-   const fssaiText = document.createElement('span');
-   fssaiText.classList.add('fssai-text');
-   fssaiText.textContent = 'FSSAI Lic. No. 10012031000312';
-   fssaiContainer.appendChild(fssaiText);
- 
-   leftContainer.appendChild(fssaiContainer);
- 
-   // Center: Form
-   const centerContainer = document.createElement('div');
-   centerContainer.classList.add('center-form');
- 
-   const title = document.createElement('h2');
-   title.classList.add('title');
-   
-   // AASHIRVAAD as image
-   const titleLogo = createOptimizedPicture(data.title_logo, 'AASHIRVAAD', false, [{ width: '150' }]);
-   titleLogo.querySelector('img').style.height = '50px';
-   title.appendChild(titleLogo);
-   
-   // "in your inbox" as text
-   const titleText = document.createElement('span');
-   titleText.textContent = data.title_text || 'in Your Inbox';
-   title.appendChild(titleText);
-   
-   centerContainer.appendChild(title);
- 
-   const emailInput = document.createElement('input');
-   emailInput.type = 'email';
-   emailInput.placeholder = 'Enter your Email ID';
-   emailInput.classList.add('email-input');
-   emailInput.required = true;
-   centerContainer.appendChild(emailInput);
- 
-   const checkboxRow = document.createElement('div');
-   checkboxRow.classList.add('checkbox-row');
-   const checkbox = document.createElement('input');
-   checkbox.type = 'checkbox';
-   checkbox.id = 'terms-checkbox';
-   checkbox.required = true;
-   checkboxRow.appendChild(checkbox);
- 
-   const label = document.createElement('label');
-   label.htmlFor = 'terms-checkbox';
-   label.innerHTML = buildCheckboxLabel(data.terms_text, data.privacy);
-   checkboxRow.appendChild(label);
-   centerContainer.appendChild(checkboxRow);
- 
-   const registerBtn = document.createElement('button');
-   registerBtn.classList.add('register-btn');
-   registerBtn.innerHTML = 'Register<br>Now';
-   registerBtn.addEventListener('click', () => handleRegister(emailInput, checkbox));
-   centerContainer.appendChild(registerBtn);
- 
-   // Right: Links
-   const rightContainer = buildRightLinks(data);
- 
-   // Assemble
-   block.append(leftContainer, centerContainer, rightContainer);
- }
+  // Validate required data
+  if (!data.logo1 || !data.fssai || !data.title_logo || !data.title_text) {
+    console.error('Missing required data: logo1, fssai, title_logo, title_text.');
+    return;
+  }
+
+  // Build structure
+  block.classList.add('newsletter-signup');
+
+  // Left: Logos
+  const leftContainer = document.createElement('div');
+  leftContainer.classList.add('left-logos');
+
+  const logo1 = document.createElement('img');
+  logo1.src = data.logo1;
+  logo1.alt = 'Aashirvaad Logo';
+
+  const fssaiImg = document.createElement('img');
+  fssaiImg.src = data.fssai;
+  fssaiImg.alt = 'FSSAI License';
+
+  leftContainer.append(logo1, fssaiImg);
+
+  // Center: Form
+  const centerContainer = document.createElement('div');
+  centerContainer.classList.add('center-form');
+
+  const title = document.createElement('h2');
+  title.classList.add('title');
+  
+  // AASHIRVAAD as image
+  const titleLogo = document.createElement('img');
+  titleLogo.src = data.title_logo;
+  titleLogo.alt = 'AASHIRVAAD';
+  title.appendChild(titleLogo);
+  
+  // "in your inbox" as text
+  const titleText = document.createElement('span');
+  titleText.textContent = data.title_text || 'in Your Inbox';
+  title.appendChild(titleText);
+  
+  centerContainer.appendChild(title);
+
+  const emailInput = document.createElement('input');
+  emailInput.type = 'email';
+  emailInput.placeholder = 'Enter your Email ID';
+  emailInput.classList.add('email-input');
+  centerContainer.appendChild(emailInput);
+
+  const checkboxRow = document.createElement('div');
+  checkboxRow.classList.add('checkbox-row');
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.id = 'terms-checkbox';
+  const label = document.createElement('label');
+  label.htmlFor = 'terms-checkbox';
+  label.textContent = 'By clicking "Register Now", you agree to the Privacy Policy, and to receive marketing emails from the Aashirvaad community';
+  checkboxRow.append(checkbox, label);
+  centerContainer.appendChild(checkboxRow);
+
+  const registerBtn = document.createElement('button');
+  registerBtn.classList.add('register-btn');
+  registerBtn.innerHTML = 'Register<br>Now'; // Force 2 lines; add <br> for 3 if needed (e.g., 'Register<br><br>Now')
+  // Add form submit logic here if needed (e.g., on click)
+  registerBtn.addEventListener('click', () => {
+    if (checkbox.checked && emailInput.value) {
+      // Placeholder: Submit form (integrate with actual endpoint)
+      console.log('Registering:', emailInput.value);
+      alert('Subscribed! (Demo)');
+    } else {
+      alert('Please check terms and enter email.');
+    }
+  });
+  centerContainer.appendChild(registerBtn);
+
+  // Right: Links (as plain text for now)
+  const rightContainer = document.createElement('div');
+  rightContainer.classList.add('right-links');
+
+  const linkTexts = [
+    'Terms of use',
+    'Privacy Policy',
+    'Sitemap',
+    'Contact Us',
+    'About Us'
+  ];
+
+  linkTexts.forEach(text => {
+    const span = document.createElement('span'); // Plain text, not <a>
+    span.textContent = text;
+    rightContainer.appendChild(span);
+  });
+
+  // Assemble
+  block.innerHTML = '';
+  block.append(leftContainer, centerContainer, rightContainer);
+}
