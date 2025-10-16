@@ -268,3 +268,7 @@ main .section.highlight {
 .section.image-slider-container{
   background: #e3d8cc;
 }
+
+.section.newsletter-signup-container{
+  background: red;
+}

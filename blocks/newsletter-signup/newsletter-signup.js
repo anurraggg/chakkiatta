@@ -49,14 +49,11 @@ export default function decorate(block) {
     const titleLogo = document.createElement('img');
     titleLogo.src = data.title_logo;
     titleLogo.alt = 'AASHIRVAAD';
-    titleLogo.style.verticalAlign = 'middle'; // Align with text
-    titleLogo.style.height = '30px'; // Adjust size as needed
     title.appendChild(titleLogo);
     
     // "in your inbox" as text
     const titleText = document.createElement('span');
     titleText.textContent = data.title_text || 'in Your Inbox';
-    titleText.style.marginLeft = '5px';
     title.appendChild(titleText);
     
     centerContainer.appendChild(title);
@@ -80,7 +77,7 @@ export default function decorate(block) {
   
     const registerBtn = document.createElement('button');
     registerBtn.classList.add('register-btn');
-    registerBtn.textContent = 'Register Now';
+    registerBtn.innerHTML = 'Register<br>Now'; // Force 2 lines; add <br> for 3 if needed (e.g., 'Register<br><br>Now')
     // Add form submit logic here if needed (e.g., on click)
     registerBtn.addEventListener('click', () => {
       if (checkbox.checked && emailInput.value) {
