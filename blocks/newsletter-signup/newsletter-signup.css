@@ -60,16 +60,18 @@
 .newsletter-signup .title span {
   margin: 0;
   line-height: 1.2; /* Adjusted for better baseline match */
-  font-size: 25px;
+  font-size: 29px;
   padding-top: 0; /* Removed excessive padding; use flex alignment */
+  color: #fff6e3;
+  padding-left: 20px;
 }
 
 .newsletter-signup .email-input {
   padding: 10px 15px;
-  border: 2px solid #ffffff; /* White border for rounded look */
+  border: 2px solid #fff6e3; /* White border for rounded look */
   border-radius: 25px; /* Highly rounded */
   background-color: #d9001d; 
-  width: 330px;
+  width: 360px;
   max-width: 100%;
   font-size: 18px;
   color: #000000; /* Black text for readability */
@@ -108,10 +110,10 @@
 
 .newsletter-signup .register-btn {
   background: #ed808d; /* Pink for CTA */
-  color: #ffffff; /* White text */
+  color: black; /* White text */
   border: none;
-  padding: 12px 24px;
-  border-radius: 25px; /* Highly rounded */
+  padding: 14px 30px;
+  border-radius: 20px; /* Highly rounded */
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s;
