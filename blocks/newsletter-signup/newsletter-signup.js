@@ -77,7 +77,7 @@ export default function decorate(block) {
 
   const registerBtn = document.createElement('button');
   registerBtn.classList.add('register-btn');
-  registerBtn.innerHTML = 'Register<br>Now'; // Force 2 lines; add <br> for 3 if needed (e.g., 'Register<br><br>Now')
+  registerBtn.textContent = 'Register Now'; // Single line text
   // Add form submit logic here if needed (e.g., on click)
   registerBtn.addEventListener('click', () => {
     if (checkbox.checked && emailInput.value) {

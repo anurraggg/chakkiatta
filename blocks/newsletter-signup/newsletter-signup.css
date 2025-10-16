@@ -16,14 +16,13 @@
   display: flex;
   flex-direction: column; /* Stack vertically */
   align-items: flex-start; /* Align left for logos */
-  gap: 5px; /* Smaller gap for vertical */
+  gap: 40px; /* Gap for vertical spacing */
   flex-shrink: 0;
 }
 
 .newsletter-signup .left-logos img {
-  height: 60px; /* Adjust as needed */
-  max-width: 150px;
   object-fit: contain;
+  width: 200px;
 }
 
 .newsletter-signup .fssai-text {
@@ -45,42 +44,77 @@
   font-size: 24px;
   font-weight: bold;
   margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* Space between logo and text */
+}
+
+.newsletter-signup .title img {
+  height: 60px; /* Fixed height for title logo to match text baseline */
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.newsletter-signup .title span {
+  margin: 0;
+  line-height: 1.2; /* Adjusted for better baseline match */
+  font-size: 25px;
+  padding-top: 0; /* Removed excessive padding; use flex alignment */
 }
 
 .newsletter-signup .email-input {
   padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
+  border: 2px solid #ffffff; /* White border for rounded look */
+  border-radius: 25px; /* Highly rounded */
+  background-color: #ffffff; /* White background */
   width: 250px;
   max-width: 100%;
   font-size: 16px;
+  color: #000000; /* Black text for readability */
+}
+
+.newsletter-signup .email-input::placeholder {
+  color: #999999; /* Gray placeholder */
 }
 
 .newsletter-signup .checkbox-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Top-align for multi-line label */
   gap: 8px;
   font-size: 14px;
   opacity: 0.9;
+  max-width: 300px; /* Constrain for wrapping */
+  text-align: left;
 }
 
 .newsletter-signup .checkbox-row input[type="checkbox"] {
   width: auto;
+  margin-top: 2px; /* Align with text top */
+  flex-shrink: 0;
+}
+
+.newsletter-signup .checkbox-row label {
+  flex: 1;
+  white-space: normal; /* Allow wrapping */
+  line-height: 1.4; /* Multi-line spacing */
+  word-break: break-word;
 }
 
 .newsletter-signup .register-btn {
-  background: #ffc107; /* Gold/yellow for CTA */
-  color: #000;
+  background: #ff69b4; /* Pink for CTA */
+  color: #ffffff; /* White text */
   border: none;
   padding: 12px 24px;
-  border-radius: 4px;
+  border-radius: 25px; /* Highly rounded */
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s;
+  white-space: nowrap; /* Single line */
 }
 
 .newsletter-signup .register-btn:hover {
-  background: #ffed4e;
+  background: #ff1493; /* Darker pink on hover */
 }
 
 .newsletter-signup .right-links {
@@ -113,5 +147,22 @@
   }
   .newsletter-signup .email-input {
     width: 100%;
+  }
+  .newsletter-signup .title {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .newsletter-signup .title img {
+    height: 40px; /* Smaller on mobile */
+  }
+  .newsletter-signup .checkbox-row {
+    text-align: center;
+    max-width: 100%;
+  }
+
+  img[alt="Aashirvaad Logo"] {
+    padding-bottom: 30px;
+    width: 60px;
+    height: 60px;
   }
 }
