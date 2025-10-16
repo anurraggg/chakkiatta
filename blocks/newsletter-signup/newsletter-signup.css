@@ -64,6 +64,7 @@
   padding-top: 0; /* Removed excessive padding; use flex alignment */
   color: #fff6e3;
   padding-left: 20px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .newsletter-signup .email-input {
