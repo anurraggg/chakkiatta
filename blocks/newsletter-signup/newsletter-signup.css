@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ff0000; /* Red theme */
+  background: #d9001d; /* Red theme */
   color: white;
   padding: 20px;
   max-width: 1200px;
@@ -68,7 +68,7 @@
   padding: 10px 15px;
   border: 2px solid #ffffff; /* White border for rounded look */
   border-radius: 25px; /* Highly rounded */
-  background-color: red; /* White background */
+  background-color: #d9001d; 
   width: 330px;
   max-width: 100%;
   font-size: 18px;
