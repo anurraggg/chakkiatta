@@ -35,9 +35,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  align-items: baseline;
+  gap: 20px;
   text-align: center;
+  padding-left: 8rem;
 }
 
 .newsletter-signup .title {
@@ -67,15 +68,15 @@
   padding: 10px 15px;
   border: 2px solid #ffffff; /* White border for rounded look */
   border-radius: 25px; /* Highly rounded */
-  background-color: #ffffff; /* White background */
-  width: 250px;
+  background-color: red; /* White background */
+  width: 330px;
   max-width: 100%;
-  font-size: 16px;
+  font-size: 18px;
   color: #000000; /* Black text for readability */
 }
 
 .newsletter-signup .email-input::placeholder {
-  color: #999999; /* Gray placeholder */
+  color: #fff6e3; /* Gray placeholder */
 }
 
 .newsletter-signup .checkbox-row {
