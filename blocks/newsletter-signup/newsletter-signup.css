@@ -90,20 +90,24 @@
 }
 
 .newsletter-signup .checkbox-row input[type="checkbox"] {
-  width: auto;
+  width: 15px;
   margin-top: 2px; /* Align with text top */
   flex-shrink: 0;
+  height: 20px;
 }
 
 .newsletter-signup .checkbox-row label {
   flex: 1;
   white-space: normal; /* Allow wrapping */
-  line-height: 1.4; /* Multi-line spacing */
+  line-height: 1.5; /* Multi-line spacing */
   word-break: break-word;
+  font-weight: bold;
+  font-size: 18px;
+  color: #fff6e3;
 }
 
 .newsletter-signup .register-btn {
-  background: #ff69b4; /* Pink for CTA */
+  background: #ed808d; /* Pink for CTA */
   color: #ffffff; /* White text */
   border: none;
   padding: 12px 24px;
@@ -120,15 +124,35 @@
 
 .newsletter-signup .right-links {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: row; /* Horizontal for two columns */
+  gap: 0;
   font-size: 14px;
   white-space: nowrap;
+  align-items: flex-start; /* Align tops */
+}
+
+.newsletter-signup .right-links .left-column,
+.newsletter-signup .right-links .right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Vertical spacing in columns */
+  padding-right: 15px;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.newsletter-signup .right-links .separator {
+  width: 1px;
+  background-color: #ffffff; /* White vertical line */
+  margin: 0 10px; /* Space around separator */
+  height: 100%; /* Full height of columns */
+  opacity: 0.9;
 }
 
 .newsletter-signup .right-links span {
-  color: white;
+  color: #fff6e3;
   opacity: 0.9;
+  font-size: 20px;
 }
 
 /* Mobile: Stack vertically */
@@ -143,8 +167,12 @@
     justify-content: center;
   }
   .newsletter-signup .right-links {
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column; /* Stack columns vertically on mobile */
+    align-items: center;
+    gap: 10px;
+  }
+  .newsletter-signup .right-links .separator {
+    display: none; /* Hide separator on mobile */
   }
   .newsletter-signup .email-input {
     width: 100%;

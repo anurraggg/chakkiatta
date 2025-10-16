@@ -90,23 +90,44 @@ export default function decorate(block) {
   });
   centerContainer.appendChild(registerBtn);
 
-  // Right: Links (as plain text for now)
+  // Right: Links (two-column with separator)
   const rightContainer = document.createElement('div');
   rightContainer.classList.add('right-links');
 
-  const linkTexts = [
-    'Terms of use',
-    'Privacy Policy',
-    'Sitemap',
-    'Contact Us',
-    'About Us'
+  // Left column
+  const leftColumn = document.createElement('div');
+  leftColumn.classList.add('left-column');
+  const leftLinks = [
+    data.terms_text || 'Terms of use',
+    data.privacy || 'Privacy Policy',
+    data.sitemap || 'Sitemap'
   ];
-
-  linkTexts.forEach(text => {
-    const span = document.createElement('span'); // Plain text, not <a>
+  leftLinks.forEach(text => {
+    const span = document.createElement('span');
     span.textContent = text;
-    rightContainer.appendChild(span);
+    leftColumn.appendChild(span);
   });
+
+  // Separator
+  const separator = document.createElement('div');
+  separator.classList.add('separator');
+
+  // Right column
+  const rightColumn = document.createElement('div');
+  rightColumn.classList.add('right-column');
+  const rightLinks = [
+    data.products || 'Our Products',
+    data.contact || 'Contact Us',
+    data.about || 'About Us'
+  ];
+  rightLinks.forEach(text => {
+    const span = document.createElement('span');
+    span.textContent = text;
+    rightColumn.appendChild(span);
+  });
+
+  // Assemble right links
+  rightContainer.append(leftColumn, separator, rightColumn);
 
   // Assemble
   block.innerHTML = '';
