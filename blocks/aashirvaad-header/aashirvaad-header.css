@@ -19,7 +19,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  height: 60px;
+  height: 70px;
   position: relative;
 }
 
@@ -101,10 +101,11 @@
 }
 
 .aashirvaad-header .search-icon {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
-  opacity: 0.8;
+  opacity: 1;
+  margin-left: 600px;
 }
 
 .aashirvaad-header .search-icon:hover {
