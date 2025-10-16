@@ -3,163 +3,170 @@
  * Block: newsletter-signup
  */
 
-/* Container */
-.newsletter-signup {
-  background-color: #ff0000;
-  color: #ffffff;
-  padding: 2rem 1rem;
-  font-family: Arial, sans-serif;
-  line-height: 1.4;
+ .newsletter-signup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ff0000; /* Red theme */
+  color: white;
+  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  border-radius: 8px;
+  gap: 20px;
+  font-family: Arial, sans-serif;
 }
 
-/* Header Section */
-.newsletter-signup-header {
+.newsletter-signup .left-logos {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  text-align: center;
+  flex-direction: column; /* Stack vertically */
+  align-items: flex-start; /* Align left for logos */
+  gap: 5px; /* Smaller gap for vertical */
+  flex-shrink: 0;
 }
 
-.newsletter-signup-logo {
-  width: 150px;
-  height: auto;
-  margin-bottom: 0.5rem;
+.newsletter-signup .left-logos img {
+  height: 100px; /* Adjust as needed */
+  max-width: 190px;
+  object-fit: contain;
 }
 
-.newsletter-signup-fssai {
-  width: 80px;
-  height: auto;
-  margin-bottom: 1rem;
-  opacity: 0.8;
+.newsletter-signup .fssai-text {
+  font-size: 12px;
+  opacity: 0.9;
+  white-space: nowrap;
 }
 
-.newsletter-signup-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-.newsletter-signup-title-logo {
-  width: 100px;
-  height: auto;
-}
-
-.newsletter-signup-title-text {
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Form Section */
-.newsletter-signup-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.newsletter-signup-input {
-  width: 100%;
-  max-width: 300px;
-  padding: 0.75rem;
-  border: 2px solid #ffffff;
-  border-radius: 25px;
-  background-color: transparent;
-  color: #ffffff;
-  font-size: 1rem;
-  text-align: center;
-}
-
-.newsletter-signup-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.newsletter-signup-checkbox-container {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  text-align: center;
-  max-width: 300px;
-}
-
-.newsletter-signup-checkbox {
-  margin-top: 0.25rem;
-  accent-color: #ffffff;
-}
-
-.newsletter-signup-checkbox-text {
+.newsletter-signup .center-form {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
 }
 
-.newsletter-signup-link {
-  color: #ffffff;
-  text-decoration: underline;
-  cursor: pointer;
+.newsletter-signup .title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  display: flex; /* Flex for baseline alignment */
+  align-items: baseline; /* Align bottoms/baselines */
+  gap: 5px; /* Space between image and text */
 }
 
-.newsletter-signup-link:hover {
-  text-decoration: none;
+.newsletter-signup .title img {
+  height: 50px; /* Match JS height */
+  vertical-align: baseline; /* Fallback */
 }
 
-.newsletter-signup-button {
-  background-color: #ffffff;
-  color: #ff0000;
+.newsletter-signup .title span {
+  margin-left: 0; /* Reset; use gap */
+}
+
+.newsletter-signup .email-input {
+  padding: 10px 15px;
   border: none;
-  padding: 0.75rem 2rem;
-  border-radius: 25px;
-  font-size: 1rem;
+  border-radius: 4px;
+  width: 250px;
+  max-width: 100%;
+  font-size: 16px;
+}
+
+.newsletter-signup .checkbox-row {
+  display: flex;
+  align-items: flex-start; /* Top-align for multi-line label */
+  gap: 8px;
+  font-size: 14px;
+  opacity: 0.9;
+  width: 100%; /* Full width for wrapping */
+  flex-wrap: wrap; /* Allow wrap if needed */
+}
+
+.newsletter-signup .checkbox-row input[type="checkbox"] {
+  width: auto;
+  flex-shrink: 0; /* Keep checkbox fixed */
+  align-self: flex-start;
+  margin-top: 2px; /* Slight nudge for top alignment */
+}
+
+.newsletter-signup .checkbox-row label {
+  flex: 1;
+  min-width: 0; /* Allow shrink for wrapping */
+  white-space: normal !important; /* Force wrapping, override any defaults */
+  line-height: 1.4; /* Spacing for 3 lines */
+  max-width: 100%; /* Constrain to container */
+  display: inline-block; /* Enable wrapping */
+  word-break: break-word; /* Break long words */
+  hyphens: auto; /* Hyphenate */
+  overflow-wrap: break-word; /* Modern word break */
+  width: calc(100% - 20px); /* Constrain width to force wrap */
+}
+
+.newsletter-signup .register-btn {
+  background: #ffc107; /* Gold/yellow for CTA */
+  color: #000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-  max-width: 200px;
+  transition: background 0.3s;
 }
 
-.newsletter-signup-button:hover {
-  background-color: #f0f0f0;
+.newsletter-signup .register-btn:hover {
+  background: #ffed4e;
 }
 
-/* Footer Navigation */
-.newsletter-signup-footer {
+.newsletter-signup .right-links {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 1rem;
-  font-size: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
-  padding-top: 1rem;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+  white-space: nowrap;
 }
 
-.newsletter-signup-footer-link {
-  color: #ffffff;
+.newsletter-signup .right-links a {
+  color: white;
+  opacity: 0.9;
   text-decoration: none;
 }
 
-.newsletter-signup-footer-link:hover {
+.newsletter-signup .right-links a:hover {
   text-decoration: underline;
+  opacity: 1;
 }
 
-/* Responsive */
+/* Mobile: Stack vertically */
 @media (max-width: 768px) {
   .newsletter-signup {
-    padding: 1.5rem 0.5rem;
-  }
-
-  .newsletter-signup-title {
-    font-size: 1.25rem;
-  }
-
-  .newsletter-signup-footer {
     flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  .newsletter-signup .left-logos {
+    flex-direction: row; /* Side-by-side on mobile for space */
+    justify-content: center;
+  }
+  .newsletter-signup .right-links {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .newsletter-signup .email-input {
+    width: 100%;
+  }
+  .newsletter-signup .title {
+    flex-direction: column; /* Stack title on mobile */
     align-items: center;
-    gap: 0.5rem;
+    gap: 0;
+  }
+  .newsletter-signup .checkbox-row {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .newsletter-signup .checkbox-row label {
+    text-align: center; /* Center on mobile */
+    width: 100%; /* Full width on mobile for wrap */
   }
 }
