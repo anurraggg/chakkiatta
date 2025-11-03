@@ -69,11 +69,11 @@ export default function decorate(block) {
   block.innerHTML = '';
   block.append(mainContainer, thumbsContainer);
 
-  // Align main video height to thumbnails (after DOM render)
-  requestAnimationFrame(() => {
-    const thumbsHeight = thumbsContainer.offsetHeight;
-    mainIframe.style.height = `${thumbsHeight}px`; // Match exactly
-  });
+  // --- THIS BLOCK IS NOW REMOVED ---
+  // requestAnimationFrame(() => {
+  //   const thumbsHeight = thumbsContainer.offsetHeight;
+  //   mainIframe.style.height = `${thumbsHeight}px`; // Match exactly
+  // });
 }
 
 // Helper: Extract YouTube ID from URL
