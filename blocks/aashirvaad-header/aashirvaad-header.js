@@ -1,4 +1,3 @@
-// aashirvaad-header.js
 /*
  * Copyright 2025 Franklin. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -116,7 +115,7 @@ function buildNav(navItems) {
     a.href = `#${item.label.toLowerCase().replace(/\s+/g, '-')}`;
     a.textContent = item.label;
     a.classList.add('nav-item');
-    a.setAttribute('aria-label', `Navigate to ${item.label}`);
+    a.setAttribute('aria-label', `Maps to ${item.label}`);
     li.appendChild(a);
 
     if (item.subItems && item.subItems.length > 0) {
@@ -128,7 +127,7 @@ function buildNav(navItems) {
         subA.href = `#${sub.toLowerCase().replace(/\s+/g, '-')}`;
         subA.textContent = sub;
         subA.classList.add('nav-item');
-        subA.setAttribute('aria-label', `Navigate to ${sub}`);
+        subA.setAttribute('aria-label', `Maps to ${sub}`);
         subLi.appendChild(subA);
         dropdownUl.appendChild(subLi);
       });
@@ -174,6 +173,21 @@ export default async function decorate(block) {
     header.classList.add('fixed');
   }
   console.log('decorate: Created header element');
+  
+  // --- NEW CODE ---
+  // Create hamburger icon
+  const hamburger = document.createElement('div');
+  hamburger.classList.add('nav-hamburger');
+  hamburger.innerHTML = '<span></span><span></span><span></span>'; // 3 lines for the icon
+  header.appendChild(hamburger);
+  console.log('decorate: Added hamburger');
+
+  // Add click listener for hamburger
+  hamburger.addEventListener('click', () => {
+    header.classList.toggle('nav-open');
+    console.log('Toggled mobile nav');
+  });
+  // --- END OF NEW CODE ---
 
   // Create logo
   const logoImg = document.createElement('img');
