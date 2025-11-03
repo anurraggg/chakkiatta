@@ -1,27 +1,33 @@
 export default function decorate(block) {
   const rows = block.querySelectorAll(':scope > div');
   
-  // --- THIS IS THE NEW PARSING LOGIC ---
-  if (rows.length < 2) return; // We need 2 rows: one for titles, one for URLs
+  // --- THIS IS THE CORRECT HORIZONTAL PARSER ---
+  if (rows.length < 2) return; // Need 2 rows: one for titles, one for URLs
 
   const titleCells = rows[0].querySelectorAll(':scope > div');
   const urlCells = rows[1].querySelectorAll(':scope > div');
+
+  // Check that the number of title cells matches url cells, ignoring the header
+  if (titleCells.length !== urlCells.length) {
+    console.warn('Video gallery: Title and URL rows have different column counts.');
+  }
   
   const videos = [];
-  // Start loop at 1 to skip the "Title" and "YouTube URL" header cells
-  for (let i = 1; i < titleCells.length; i += 1) {
-    if (urlCells[i]) { // Check if a matching URL cell exists
+  // Start loop at 1 to skip the header cells ("Title", "YouTube URL")
+  for (let i = 1; i < titleCells.length; i += 1) { 
+    if (urlCells[i]) { // Check that a URL cell exists for this title
       const title = titleCells[i].textContent.trim();
       const url = urlCells[i].textContent.trim();
-      const videoId = extractYouTubeId(url); // Helper to get ID
+      const videoId = extractYouTubeId(url);
+      
       if (videoId) {
         videos.push({ title, id: videoId });
       } else {
-        console.warn(`Invalid YouTube URL in column ${i + 1}: ${url} - Skipping.`);
+        console.warn(`Invalid YouTube URL in column ${i + 1}: ${url}`);
       }
     }
   }
-  // --- END OF NEW PARSING LOGIC ---
+  // --- END OF PARSER ---
 
   if (videos.length === 0) {
     console.error('No valid videos found. Check table structure/URLs.');
@@ -45,7 +51,7 @@ export default function decorate(block) {
   videos.forEach((video, i) => {
     const thumb = document.createElement('div');
     thumb.classList.add('thumbnail');
-    if (i === 0) thumb.classList.add('active');
+    if (i === 0) thumb.classList.add('active'); // Select the first one
 
     const img = document.createElement('img');
     img.src = `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`;
@@ -58,7 +64,7 @@ export default function decorate(block) {
     overlay.innerHTML = '▶';
 
     const titleP = document.createElement('p');
-    titleP.textContent = video.title;
+    titleP.textContent = video.title; // This will now be "First Ad", "Second Ad", etc.
 
     thumb.append(img, overlay, titleP);
     thumb.addEventListener('click', () => switchVideo(i, mainIframe, videos, thumbsContainer));
@@ -68,10 +74,7 @@ export default function decorate(block) {
   block.innerHTML = '';
   block.append(mainContainer, thumbsContainer);
 
-  // --- THIS SECTION IS NOW REMOVED ---
-  // The alignVideoHeight() function that added
-  // the inline style="height:..." is gone.
-  // --- END OF REMOVAL ---
+  // The code that added the inline "height" style is gone.
 }
 
 // Helper: Extract YouTube ID from URL
