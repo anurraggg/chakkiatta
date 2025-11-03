@@ -72,7 +72,7 @@
   object-fit: cover;
 }
 
-/* --- THIS IS THE FIX --- */
+/* --- THIS IS THE CRITICAL CSS FIX --- */
 .video-gallery .thumbnail .play-overlay {
   position: absolute;
   top: 50%;

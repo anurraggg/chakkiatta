@@ -1,7 +1,7 @@
 // Helper: Extract YouTube ID from URL
 function extractYouTubeId(url) {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
+  const match = url.match(RegExp);
   return (match && match[2].length === 11) ? match[2] : null;
 }
 
@@ -47,7 +47,7 @@ export default function decorate(block) {
   const thumbsContainer = document.createElement('div');
   thumbsContainer.classList.add('thumbnails');
 
-  // --- THIS FUNCTION IS NOW INSIDE decorate ---
+  // --- THIS FUNCTION CONTAINS THE FIX ---
   function switchVideo(index) {
     // 1. Update active thumb
     Array.from(thumbsContainer.children).forEach((thumb, i) => {
@@ -57,7 +57,6 @@ export default function decorate(block) {
     // 2. Get the new video ID
     const video = videos[index];
 
-    // --- THIS IS THE NEW FIX ---
     // 3. Remove the old iframe completely
     mainContainer.innerHTML = ''; 
 
@@ -69,9 +68,8 @@ export default function decorate(block) {
     
     // 5. Add the new one to the page
     mainContainer.appendChild(newIframe);
-    // --- END OF NEW FIX ---
   }
-  // --- END OF MOVED FUNCTION ---
+  // --- END OF FUNCTION ---
 
   videos.forEach((video, i) => {
     const thumb = document.createElement('div');
