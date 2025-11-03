@@ -25,11 +25,16 @@
 }
 
 .image-slider .slider-slide {
-  flex: 0 0 calc(108% / 3); /* 3 visible on desktop; JS overrides for responsive */
+  flex: 0 0 100%; /* Show 1 slide */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 10px; /* Minimal spacing */
+  
+  /* --- NEW: Fix collapsing content --- */
+  flex-direction: column;   /* Stack image and text vertically */
+  justify-content: flex-start; /* Align content to the top */
+  align-items: center;      /* Center content horizontally */
+  /* --- End new styles --- */
+  
+  padding: 0 10px;
   box-sizing: border-box;
 }
 
@@ -38,7 +43,24 @@
   height: 300px;
   object-fit: cover;
   border-radius: 8px;
+  
+  /* --- NEW: Stop image from being too wide --- */
+  max-width: 300px;
 }
+
+/* --- NEW: Style the text inside the slide --- */
+/* This assumes your text is in a <p> tag */
+.image-slider .slider-slide p {
+  color: #333; /* Text is dark, not white */
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 15px;
+  white-space: normal;
+  word-break: break-word;
+  padding: 0 10px; /* Give text breathing room */
+}
+/* --- End new styles --- */
 
 .image-slider .slider-navigation-buttons {
   display: flex;
@@ -77,7 +99,10 @@
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: 300px;
+  
+  /* --- MODIFIED: Fix dot spacing --- */
+  margin-top: 20px; /* Was 300px, which was too much */
+  
   list-style: none;
   padding: 0;
 }
@@ -98,14 +123,28 @@
 
 /* Mobile: 1 slide */
 @media (max-width: 768px) {
-  .image-slider .slider-slide {
-    flex: 0 0 100%;
-    padding: 0 5px;
-  }
   .image-slider .slider-slide img {
     height: 200px;
+    max-width: 200px; /* Keep it smaller on mobile */
   }
+
+  .image-slider .slider-slide p {
+    font-size: 12px; /* Smaller text on mobile */
+    margin-top: 10px;
+  }
+
   .image-slider .slider-container {
     padding: 0 40px;
   }
+
+  /* --- NEW: Fix for overlapping buttons --- */
+  .image-slider .slider-navigation-buttons {
+    /* * Move buttons to be vertically centered on the IMAGE, not the whole slide.
+     * Block padding-top: 40px
+     * Mobile Image height: 200px
+     * Center of image = 40px (padding) + (200px / 2) = 140px
+     */
+    top: 140px; 
+  }
+  /* --- End new fix --- */
 }
