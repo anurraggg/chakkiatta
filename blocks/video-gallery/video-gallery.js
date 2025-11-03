@@ -69,16 +69,32 @@ export default function decorate(block) {
   block.innerHTML = '';
   block.append(mainContainer, thumbsContainer);
 
-  // --- THIS BLOCK IS NOW REMOVED ---
-  // requestAnimationFrame(() => {
-  //   const thumbsHeight = thumbsContainer.offsetHeight;
-  //   mainIframe.style.height = `${thumbsHeight}px`; // Match exactly
-  // });
+  // --- THIS IS THE FIX ---
+  // This function now checks the screen size
+  function alignVideoHeight() {
+    if (window.innerWidth > 768) {
+      // Desktop: Run your original code
+      requestAnimationFrame(() => {
+        const thumbsHeight = thumbsContainer.offsetHeight;
+        mainIframe.style.height = `${thumbsHeight}px`; // Match exactly
+      });
+    } else {
+      // Mobile: Remove the inline style so CSS can take over
+      mainIframe.style.height = '';
+    }
+  }
+
+  // Run it on load
+  alignVideoHeight();
+  
+  // And run it again if the window is resized
+  window.addEventListener('resize', alignVideoHeight);
+  // --- END OF FIX ---
 }
 
 // Helper: Extract YouTube ID from URL
 function extractYouTubeId(url) {
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch?v=|&v=)([^#&?]*).*/;
   const match = url.match(regExp);
   return (match && match[2].length === 11) ? match[2] : null;
 }
