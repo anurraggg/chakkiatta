@@ -36,34 +36,40 @@ export default function decorate(block) {
 
   const mainContainer = document.createElement('div');
   mainContainer.classList.add('main-video');
-  const mainIframe = document.createElement('iframe');
-  // This line loads the FIRST video by default
-  mainIframe.src = `https://www.youtube.com/embed/${videos[0].id}?autoplay=0&rel=0`;
-  mainIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-  mainIframe.allowFullscreen = true;
-  mainContainer.appendChild(mainIframe);
+  
+  // Create the *initial* iframe
+  const initialIframe = document.createElement('iframe');
+  initialIframe.src = `https://www.youtube.com/embed/${videos[0].id}?autoplay=0&rel=0`;
+  initialIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  initialIframe.allowFullscreen = true;
+  mainContainer.appendChild(initialIframe);
 
   const thumbsContainer = document.createElement('div');
   thumbsContainer.classList.add('thumbnails');
 
   // --- THIS FUNCTION IS NOW INSIDE decorate ---
   function switchVideo(index) {
-    // Update active thumb
+    // 1. Update active thumb
     Array.from(thumbsContainer.children).forEach((thumb, i) => {
       thumb.classList.toggle('active', i === index);
     });
 
-    // --- THIS IS THE FIX ---
-    // Update main iframe and play it
+    // 2. Get the new video ID
     const video = videos[index];
-    const newUrl = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0`;
 
-    // Force redraw by setting src to blank first
-    mainIframe.src = 'about:blank';
-    setTimeout(() => {
-      mainIframe.src = newUrl;
-    }, 10); // A small delay
-    // --- END OF FIX ---
+    // --- THIS IS THE NEW FIX ---
+    // 3. Remove the old iframe completely
+    mainContainer.innerHTML = ''; 
+
+    // 4. Create a brand new iframe
+    const newIframe = document.createElement('iframe');
+    newIframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0`;
+    newIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    newIframe.allowFullscreen = true;
+    
+    // 5. Add the new one to the page
+    mainContainer.appendChild(newIframe);
+    // --- END OF NEW FIX ---
   }
   // --- END OF MOVED FUNCTION ---
 
@@ -71,7 +77,7 @@ export default function decorate(block) {
     const thumb = document.createElement('div');
     thumb.classList.add('thumbnail');
     
-    // This adds the 'active' class to the first video
+    // This line selects the FIRST video by default
     if (i === 0) thumb.classList.add('active');
 
     // Thumbnail image (YouTube preview)
@@ -93,7 +99,7 @@ export default function decorate(block) {
 
     thumb.append(img, overlay, titleP);
     
-    // This click listener is now simpler
+    // This click listener calls the function above
     thumb.addEventListener('click', () => switchVideo(i));
     
     thumbsContainer.appendChild(thumb);
