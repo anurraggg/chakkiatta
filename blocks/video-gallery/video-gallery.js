@@ -47,16 +47,23 @@ export default function decorate(block) {
   thumbsContainer.classList.add('thumbnails');
 
   // --- THIS FUNCTION IS NOW INSIDE decorate ---
-  // It now has direct access to mainIframe, videos, and thumbsContainer
   function switchVideo(index) {
     // Update active thumb
     Array.from(thumbsContainer.children).forEach((thumb, i) => {
       thumb.classList.toggle('active', i === index);
     });
 
+    // --- THIS IS THE FIX ---
     // Update main iframe and play it
     const video = videos[index];
-    mainIframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0`;
+    const newUrl = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0`;
+
+    // Force redraw by setting src to blank first
+    mainIframe.src = 'about:blank';
+    setTimeout(() => {
+      mainIframe.src = newUrl;
+    }, 10); // A small delay
+    // --- END OF FIX ---
   }
   // --- END OF MOVED FUNCTION ---
 
@@ -64,7 +71,6 @@ export default function decorate(block) {
     const thumb = document.createElement('div');
     thumb.classList.add('thumbnail');
     
-    // --- THIS SOLVES YOUR FIRST PROBLEM ---
     // This adds the 'active' class to the first video
     if (i === 0) thumb.classList.add('active');
 
@@ -87,7 +93,7 @@ export default function decorate(block) {
 
     thumb.append(img, overlay, titleP);
     
-    // --- THIS CLICK LISTENER IS NOW SIMPLER ---
+    // This click listener is now simpler
     thumb.addEventListener('click', () => switchVideo(i));
     
     thumbsContainer.appendChild(thumb);
@@ -95,8 +101,4 @@ export default function decorate(block) {
 
   block.innerHTML = '';
   block.append(mainContainer, thumbsContainer);
-
-  // The requestAnimationFrame block that broke the mobile layout is still gone.
 }
-
-// The switchVideo function has been MOVED from here
