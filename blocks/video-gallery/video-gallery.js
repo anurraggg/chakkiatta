@@ -1,19 +1,12 @@
-// Helper: Extract YouTube ID from URL
-function extractYouTubeId(url) {
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(RegExp);
-  return (match && match[2].length === 11) ? match[2] : null;
-}
-
 export default function decorate(block) {
   const rows = block.querySelectorAll(':scope > div');
   if (rows.length < 2) return; // Need header + at least 1 video
 
-  // Extract video data from table
+  // Extract video data from table (Helix: rows as divs, cells as nested divs)
   const videos = [];
   rows.forEach((row, i) => {
     if (i === 0) return; // Skip header
-    const cells = row.querySelectorAll(':scope > div');
+    const cells = row.querySelectorAll(':scope > div'); // Parse child divs as cells
     if (cells.length >= 2) {
       const title = cells[0].textContent.trim();
       const url = cells[1].textContent.trim();
@@ -21,7 +14,7 @@ export default function decorate(block) {
       if (videoId) {
         videos.push({ title, id: videoId });
       } else {
-        console.warn(`Invalid YouTube URL in row ${i + 1}: ${url} - Skipping.`);
+        console.warn(`Invalid YouTube URL in row ${i + 1}: ${url} - Skipping. Use full 'watch?v=11charID' link.`);
       }
     }
   });
@@ -36,46 +29,19 @@ export default function decorate(block) {
 
   const mainContainer = document.createElement('div');
   mainContainer.classList.add('main-video');
-  
-  // Create the *initial* iframe
-  const initialIframe = document.createElement('iframe');
-  initialIframe.src = `https://www.youtube.com/embed/${videos[0].id}?autoplay=0&rel=0`;
-  initialIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-  initialIframe.allowFullscreen = true;
-  mainContainer.appendChild(initialIframe);
+  const mainIframe = document.createElement('iframe');
+  mainIframe.src = `https://www.youtube.com/embed/${videos[0].id}?autoplay=0&rel=0`;
+  mainIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  mainIframe.allowFullscreen = true;
+  mainContainer.appendChild(mainIframe);
 
   const thumbsContainer = document.createElement('div');
   thumbsContainer.classList.add('thumbnails');
-
-  // --- THIS FUNCTION CONTAINS THE FIX ---
-  function switchVideo(index) {
-    // 1. Update active thumb
-    Array.from(thumbsContainer.children).forEach((thumb, i) => {
-      thumb.classList.toggle('active', i === index);
-    });
-
-    // 2. Get the new video ID
-    const video = videos[index];
-
-    // 3. Remove the old iframe completely
-    mainContainer.innerHTML = ''; 
-
-    // 4. Create a brand new iframe
-    const newIframe = document.createElement('iframe');
-    newIframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0`;
-    newIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    newIframe.allowFullscreen = true;
-    
-    // 5. Add the new one to the page
-    mainContainer.appendChild(newIframe);
-  }
-  // --- END OF FUNCTION ---
+  // No class addition needed—vertical scroll is always enabled via CSS max-height
 
   videos.forEach((video, i) => {
     const thumb = document.createElement('div');
     thumb.classList.add('thumbnail');
-    
-    // This line selects the FIRST video by default
     if (i === 0) thumb.classList.add('active');
 
     // Thumbnail image (YouTube preview)
@@ -96,13 +62,35 @@ export default function decorate(block) {
     titleP.textContent = video.title;
 
     thumb.append(img, overlay, titleP);
-    
-    // This click listener calls the function above
-    thumb.addEventListener('click', () => switchVideo(i));
-    
+    thumb.addEventListener('click', () => switchVideo(i, mainIframe, videos, thumbsContainer));
     thumbsContainer.appendChild(thumb);
   });
 
   block.innerHTML = '';
   block.append(mainContainer, thumbsContainer);
+
+  // Align main video height to thumbnails (after DOM render)
+  requestAnimationFrame(() => {
+    const thumbsHeight = thumbsContainer.offsetHeight;
+    mainIframe.style.height = `${thumbsHeight}px`; // Match exactly
+  });
+}
+
+// Helper: Extract YouTube ID from URL
+function extractYouTubeId(url) {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+}
+
+// Switch video function
+function switchVideo(index, iframe, videos, thumbsContainer) {
+  // Update active thumb
+  Array.from(thumbsContainer.children).forEach((thumb, i) => {
+    thumb.classList.toggle('active', i === index);
+  });
+
+  // Update main iframe
+  const video = videos[index];
+  iframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0`;
 }
