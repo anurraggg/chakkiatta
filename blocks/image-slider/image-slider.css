@@ -103,7 +103,7 @@
 
   /* --- MODIFIED: Position at the bottom --- */
   position: absolute;
-  bottom: 15px; /* 15px from the bottom edge */
+  bottom: 1px; /* 15px from the bottom edge */
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
