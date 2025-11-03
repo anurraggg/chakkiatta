@@ -23,8 +23,12 @@ export default function decorate(block) {
   block.setAttribute('aria-roledescription', 'Slider');
   block.setAttribute('tabindex', '0');
 
+  // --- MODIFIED ---
+  // Show 3 slides on desktop (>= 768px), 1 on mobile
   const imagesPerPage = window.innerWidth >= 768 ? 3 : 1;
-  const slidesToScroll = imagesPerPage; // Scroll by full view (like sample)
+  const slidesToScroll = 1; // Always scroll 1 slide at a time
+  // --- END MODIFICATION ---
+
   const totalSlides = images.length;
   if (totalSlides === 0) return;
 
@@ -86,53 +90,55 @@ export default function decorate(block) {
   navButtons.append(prevButton, nextButton);
   container.appendChild(navButtons);
 
-   // Dots (like slick-dots)
-   const dotsContainer = document.createElement('ul');
-   dotsContainer.classList.add('slider-dots');
-   dotsContainer.setAttribute('role', 'tablist');
-   for (let i = 0; i < Math.ceil(totalSlides / slidesToScroll); i++) {
-     const li = document.createElement('li');
-     const button = document.createElement('button');
-     button.setAttribute('aria-label', `Go to slide ${i + 1}`);
-     button.setAttribute('aria-selected', i === 0);
-     li.appendChild(button);
-     dotsContainer.appendChild(li);
-   }
-   container.appendChild(dotsContainer);
- 
-   // Clear and append
-   block.innerHTML = '';
-   block.append(container);
-   block.classList.add('image-slider');
- 
-   // Logic
-   let currentSlide = bufferSize; // Start after prepend clones
-   let isTransitioning = false;
- 
-   const statusAnnounce = document.createElement('div');
-   statusAnnounce.className = 'sr-only';
-   statusAnnounce.setAttribute('aria-live', 'polite');
-   statusAnnounce.textContent = `Slider with ${totalSlides} images. Showing first view.`;
-   block.appendChild(statusAnnounce);
- 
-   const dots = dotsContainer.querySelectorAll('li button');
- 
-   function updateActiveSlide() {
-     Array.from(track.children).forEach((slide, idx) => {
-       const realIdx = idx - bufferSize;
-       slide.setAttribute('aria-hidden', (realIdx % totalSlides) >= imagesPerPage);
-     });
-     // Update dots
-     const currentGroup = Math.floor((currentSlide - bufferSize) / slidesToScroll);
-     dots.forEach((dot, i) => {
-       dot.classList.toggle('active', i === currentGroup);
-       dot.setAttribute('aria-selected', i === currentGroup);
-     });
-     // Status
-     const currentImage = ((currentSlide - bufferSize) % totalSlides) + 1;
-     statusAnnounce.textContent = `Showing image ${currentImage} of ${totalSlides}.`;
-   }
- 
+  // Dots (like slick-dots)
+  const dotsContainer = document.createElement('ul');
+  dotsContainer.classList.add('slider-dots');
+  dotsContainer.setAttribute('role', 'tablist');
+  // Will now create 1 dot per image
+  for (let i = 0; i < Math.ceil(totalSlides / slidesToScroll); i++) {
+    const li = document.createElement('li');
+    const button = document.createElement('button');
+    button.setAttribute('aria-label', `Go to slide ${i + 1}`);
+    button.setAttribute('aria-selected', i === 0);
+    li.appendChild(button);
+    dotsContainer.appendChild(li);
+  }
+  container.appendChild(dotsContainer);
+
+  // Clear and append
+  block.innerHTML = '';
+  block.append(container);
+  block.classList.add('image-slider');
+
+  // Logic
+  let currentSlide = bufferSize; // Start after prepend clones
+  let isTransitioning = false;
+
+  const statusAnnounce = document.createElement('div');
+  statusAnnounce.className = 'sr-only'; // This class is now used to hide the text
+  statusAnnounce.setAttribute('aria-live', 'polite');
+  statusAnnounce.textContent = `Slider with ${totalSlides} images. Showing first view.`;
+  block.appendChild(statusAnnounce);
+
+  const dots = dotsContainer.querySelectorAll('li button');
+
+  function updateActiveSlide() {
+    Array.from(track.children).forEach((slide, idx) => {
+      const realIdx = idx - bufferSize;
+      const isVisible = (realIdx >= currentSlide - bufferSize) && (realIdx < currentSlide - bufferSize + imagesPerPage);
+      slide.setAttribute('aria-hidden', !isVisible);
+    });
+    // Update dots
+    const currentGroup = Math.floor((currentSlide - bufferSize) / slidesToScroll);
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentGroup);
+      dot.setAttribute('aria-selected', i === currentGroup);
+    });
+    // Status
+    const currentImage = ((currentSlide - bufferSize) % totalSlides) + 1;
+    statusAnnounce.textContent = `Showing image ${currentImage} of ${totalSlides}.`;
+  }
+
 
   function showSlide(direction) {
     if (isTransitioning) return;
@@ -175,6 +181,7 @@ export default function decorate(block) {
     if (e.key === 'ArrowRight') showSlide(1);
   });
 
+  // --- NEW ---
   // Responsive resize
   let resizeTimeout;
   window.addEventListener('resize', () => {
@@ -182,10 +189,10 @@ export default function decorate(block) {
     resizeTimeout = setTimeout(() => {
       // Re-init widths (simplified; full re-decorate if needed)
       const newPerPage = window.innerWidth >= 768 ? 3 : 1;
-      if (newPerPage !== imagesPerPage) location.reload(); // Simple refresh for demo
+      if (newPerPage !== imagesPerPage) location.reload(); // Simple refresh
     }, 250);
   });
+  // --- END NEW ---
 
   updateActiveSlide();
 }
-

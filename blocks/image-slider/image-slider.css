@@ -25,7 +25,8 @@
 }
 
 .image-slider .slider-slide {
-  flex: 0 0 100%; /* Show 1 slide */
+  /* --- MODIFIED: Show 3 slides on desktop --- */
+  flex: 0 0 calc(100% / 3);
   display: flex;
   
   /* --- Fix collapsing content --- */
@@ -97,12 +98,16 @@
   display: flex;
   justify-content: center;
   gap: 8px;
-  
-  /* --- Fix dot spacing --- */
-  margin-top: 20px; 
-  
   list-style: none;
   padding: 0;
+
+  /* --- MODIFIED: Position at the bottom --- */
+  position: absolute;
+  bottom: 15px; /* 15px from the bottom edge */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  /* margin-top: 20px; <-- REMOVED */
 }
 
 .image-slider .slider-dots li button {
@@ -120,8 +125,18 @@
   background: #fff;
 }
 
+/* --- NEW: Hide "Showing image..." text on all screen sizes --- */
+.image-slider .sr-only {
+  display: none;
+}
+
 /* Mobile: 1 slide */
 @media (max-width: 768px) {
+  /* --- NEW: Force 1 slide on mobile --- */
+  .image-slider .slider-slide {
+    flex: 0 0 100%;
+  }
+
   .image-slider .slider-slide img {
     height: 200px;
     max-width: 200px; /* Keep it smaller on mobile */
@@ -141,12 +156,10 @@
     top: 140px; 
   }
 
-  /* --- NEWLY ADDED RULES --- */
+  /* --- Hide dots on mobile --- */
   .image-slider .slider-dots {
-    display: none; /* Hides the dots */
+    display: none;
   }
-
-  .image-slider .sr-only {
-    display: none; /* Hides the "Showing image..." text */
-  }
+  
+  /* sr-only is already hidden by the global rule */
 }
