@@ -56,7 +56,7 @@ export default function decorate(block) {
     overlay.innerHTML = '▶';
 
     const titleP = document.createElement('p');
-    titleP.textContent = video.title; // This will now be "First Ad", "Second Ad", etc.
+    titleP.textContent = video.title; 
 
     thumb.append(img, overlay, titleP);
     thumb.addEventListener('click', () => switchVideo(i, mainIframe, videos, thumbsContainer));
@@ -66,7 +66,27 @@ export default function decorate(block) {
   block.innerHTML = '';
   block.append(mainContainer, thumbsContainer);
 
-  // The code that added the inline "height" style is gone.
+  // --- THIS IS THE DESKTOP HEIGHT FIX ---
+  // This function now checks the screen size
+  function alignVideoHeight() {
+    if (window.innerWidth > 768) {
+      // Desktop: Make video height match thumbnail list height
+      requestAnimationFrame(() => {
+        const thumbsHeight = thumbsContainer.offsetHeight;
+        mainIframe.style.height = `${thumbsHeight}px`; 
+      });
+    } else {
+      // Mobile: Remove inline style so CSS (aspect-ratio) takes over
+      mainIframe.style.height = '';
+    }
+  }
+
+  // Run it on load
+  alignVideoHeight();
+  
+  // And run it again if the window is resized
+  window.addEventListener('resize', alignVideoHeight);
+  // --- END OF FIX ---
 }
 
 // Helper: Extract YouTube ID from URL
