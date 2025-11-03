@@ -28,7 +28,7 @@
   flex: 0 0 100%; /* Show 1 slide */
   display: flex;
   
-  /* --- NEW: Fix collapsing content --- */
+  /* --- Fix collapsing content --- */
   flex-direction: column;   /* Stack image and text vertically */
   justify-content: flex-start; /* Align content to the top */
   align-items: center;      /* Center content horizontally */
@@ -44,12 +44,11 @@
   object-fit: cover;
   border-radius: 8px;
   
-  /* --- NEW: Stop image from being too wide --- */
+  /* --- Stop image from being too wide --- */
   max-width: 300px;
 }
 
-/* --- NEW: Style the text inside the slide --- */
-/* This assumes your text is in a <p> tag */
+/* --- Style the text inside the slide --- */
 .image-slider .slider-slide p {
   color: #333; /* Text is dark, not white */
   font-size: 14px;
@@ -60,7 +59,6 @@
   word-break: break-word;
   padding: 0 10px; /* Give text breathing room */
 }
-/* --- End new styles --- */
 
 .image-slider .slider-navigation-buttons {
   display: flex;
@@ -100,8 +98,8 @@
   justify-content: center;
   gap: 8px;
   
-  /* --- MODIFIED: Fix dot spacing --- */
-  margin-top: 20px; /* Was 300px, which was too much */
+  /* --- Fix dot spacing --- */
+  margin-top: 20px; 
   
   list-style: none;
   padding: 0;
@@ -115,7 +113,7 @@
   border: none;
   cursor: pointer;
   transition: background 0.3s;
-  padding: 0;
+  padding: 0; /* <-- Fix for overlapping dots */
 }
 
 .image-slider .slider-dots li button.active {
@@ -138,14 +136,17 @@
     padding: 0 40px;
   }
 
-  /* --- NEW: Fix for overlapping buttons --- */
+  /* --- Fix for overlapping buttons --- */
   .image-slider .slider-navigation-buttons {
-    /* * Move buttons to be vertically centered on the IMAGE, not the whole slide.
-     * Block padding-top: 40px
-     * Mobile Image height: 200px
-     * Center of image = 40px (padding) + (200px / 2) = 140px
-     */
     top: 140px; 
   }
-  /* --- End new fix --- */
+
+  /* --- NEWLY ADDED RULES --- */
+  .image-slider .slider-dots {
+    display: none; /* Hides the dots */
+  }
+
+  .image-slider .sr-only {
+    display: none; /* Hides the "Showing image..." text */
+  }
 }
