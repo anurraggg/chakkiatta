@@ -1,10 +1,12 @@
 export default function decorate(block) {
   const rows = block.querySelectorAll(':scope > div');
   
-  // --- THIS IS THE CORRECT VERTICAL PARSER ---
+  // --- THIS IS THE CORRECTED PARSER ---
   const videos = [];
-  // Start loop at i = 2 to skip Block Name (row 0) and Header (row 1)
-  for (let i = 2; i < rows.length; i += 1) { 
+  
+  // Start loop at i = 1 (was 2)
+  // This skips the header row (rows[0]) and starts on "First Ad" (rows[1])
+  for (let i = 1; i < rows.length; i += 1) { 
     const cells = rows[i].querySelectorAll(':scope > div');
     
     if (cells.length >= 2) {
@@ -32,6 +34,7 @@ export default function decorate(block) {
   const mainContainer = document.createElement('div');
   mainContainer.classList.add('main-video');
   const mainIframe = document.createElement('iframe');
+  // This will now correctly load videos[0] which is "First Ad"
   mainIframe.src = `https://www.youtube.com/embed/${videos[0].id}?autoplay=0&rel=0`;
   mainIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
   mainIframe.allowFullscreen = true;
@@ -66,8 +69,7 @@ export default function decorate(block) {
   block.innerHTML = '';
   block.append(mainContainer, thumbsContainer);
 
-  // --- THIS IS THE DESKTOP HEIGHT FIX ---
-  // This function now checks the screen size
+  // This is the desktop height fix
   function alignVideoHeight() {
     if (window.innerWidth > 768) {
       // Desktop: Make video height match thumbnail list height
@@ -86,7 +88,6 @@ export default function decorate(block) {
   
   // And run it again if the window is resized
   window.addEventListener('resize', alignVideoHeight);
-  // --- END OF FIX ---
 }
 
 // Helper: Extract YouTube ID from URL
