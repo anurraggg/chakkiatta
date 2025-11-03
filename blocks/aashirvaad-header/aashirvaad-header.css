@@ -179,12 +179,13 @@
 
   /* Reset logo and search margins for mobile layout */
   .aashirvaad-header .logo {
-    margin-left: 0;
+    margin-left: 35px;
     padding-right: 0;
+    margin-top: 10px;
   }
   
   .aashirvaad-header .search-icon {
-    margin-left: 0;
+    margin-left: 30px;
     padding-left: 15px;
   }
 
