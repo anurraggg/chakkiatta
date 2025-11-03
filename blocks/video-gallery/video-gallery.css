@@ -13,14 +13,13 @@
   min-width: 0; /* Allow shrink */
 }
 
-/* --- THIS IS WHERE YOU CHANGE THE HEIGHT --- */
+/* This is your desktop height. Change 315px as needed. */
 .video-gallery .main-video iframe {
   width: 100%;
-  height: 315px; /* Change this value (e.g., 400px, 450px) */
+  height: 315px; 
   border: none;
   border-radius: 8px;
 }
-/* --- END OF SECTION --- */
 
 .video-gallery .thumbnails {
   flex: 0 0 300px; /* Fixed width */
@@ -67,6 +66,7 @@
   object-fit: cover;
 }
 
+/* This makes the thumbnails clickable */
 .video-gallery .thumbnail .play-overlay {
   position: absolute;
   top: 50%;
@@ -81,7 +81,7 @@
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  pointer-events: none; /* Makes the overlay clickable */
+  pointer-events: none; /* <-- THIS IS THE CLICK FIX */
 }
 
 .video-gallery .thumbnail p {
