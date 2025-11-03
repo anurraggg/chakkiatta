@@ -84,7 +84,7 @@
     /* --- THIS IS AN IMPORTANT FIX --- */
     margin-left: 0;     /* Remove the large 150px desktop margin */
     text-align: center; /* Center the title on mobile */
-    font-size: 32px;    /* Slightly smaller font for mobile */
+    font-size: 30px;    /* Slightly smaller font for mobile */
   }
 
   .product-details p.description {
