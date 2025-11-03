@@ -1,23 +1,27 @@
 export default function decorate(block) {
   const rows = block.querySelectorAll(':scope > div');
-  if (rows.length < 2) return; // Need header + at least 1 video
+  
+  // --- THIS IS THE NEW PARSING LOGIC ---
+  if (rows.length < 2) return; // We need 2 rows: one for titles, one for URLs
 
-  // Extract video data from table (Helix: rows as divs, cells as nested divs)
+  const titleCells = rows[0].querySelectorAll(':scope > div');
+  const urlCells = rows[1].querySelectorAll(':scope > div');
+  
   const videos = [];
-  rows.forEach((row, i) => {
-    if (i === 0) return; // Skip header
-    const cells = row.querySelectorAll(':scope > div'); // Parse child divs as cells
-    if (cells.length >= 2) {
-      const title = cells[0].textContent.trim();
-      const url = cells[1].textContent.trim();
+  // Start loop at 1 to skip the "Title" and "YouTube URL" header cells
+  for (let i = 1; i < titleCells.length; i += 1) {
+    if (urlCells[i]) { // Check if a matching URL cell exists
+      const title = titleCells[i].textContent.trim();
+      const url = urlCells[i].textContent.trim();
       const videoId = extractYouTubeId(url); // Helper to get ID
       if (videoId) {
         videos.push({ title, id: videoId });
       } else {
-        console.warn(`Invalid YouTube URL in row ${i + 1}: ${url} - Skipping. Use full 'watch?v=11charID' link.`);
+        console.warn(`Invalid YouTube URL in column ${i + 1}: ${url} - Skipping.`);
       }
     }
-  });
+  }
+  // --- END OF NEW PARSING LOGIC ---
 
   if (videos.length === 0) {
     console.error('No valid videos found. Check table structure/URLs.');
@@ -37,27 +41,22 @@ export default function decorate(block) {
 
   const thumbsContainer = document.createElement('div');
   thumbsContainer.classList.add('thumbnails');
-  // No class addition needed—vertical scroll is always enabled via CSS max-height
 
   videos.forEach((video, i) => {
     const thumb = document.createElement('div');
     thumb.classList.add('thumbnail');
     if (i === 0) thumb.classList.add('active');
 
-    // Thumbnail image (YouTube preview)
     const img = document.createElement('img');
     img.src = `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`;
     img.alt = video.title;
     img.loading = 'lazy';
     img.onerror = () => { img.src = 'https://via.placeholder.com/300x120?text=No+Thumb'; };
 
-    // Play overlay
-    thumb.style.position = 'relative';
     const overlay = document.createElement('div');
     overlay.classList.add('play-overlay');
     overlay.innerHTML = '▶';
 
-    // Title
     const titleP = document.createElement('p');
     titleP.textContent = video.title;
 
@@ -69,11 +68,10 @@ export default function decorate(block) {
   block.innerHTML = '';
   block.append(mainContainer, thumbsContainer);
 
-  // Align main video height to thumbnails (after DOM render)
-  requestAnimationFrame(() => {
-    const thumbsHeight = thumbsContainer.offsetHeight;
-    mainIframe.style.height = `${thumbsHeight}px`; // Match exactly
-  });
+  // --- THIS SECTION IS NOW REMOVED ---
+  // The alignVideoHeight() function that added
+  // the inline style="height:..." is gone.
+  // --- END OF REMOVAL ---
 }
 
 // Helper: Extract YouTube ID from URL
