@@ -1,29 +1,21 @@
 export default function decorate(block) {
   const rows = block.querySelectorAll(':scope > div');
   
-  // --- THIS IS THE CORRECT HORIZONTAL PARSER ---
-  if (rows.length < 2) return; // Need 2 rows: one for titles, one for URLs
-
-  const titleCells = rows[0].querySelectorAll(':scope > div');
-  const urlCells = rows[1].querySelectorAll(':scope > div');
-
-  // Check that the number of title cells matches url cells, ignoring the header
-  if (titleCells.length !== urlCells.length) {
-    console.warn('Video gallery: Title and URL rows have different column counts.');
-  }
-  
+  // --- THIS IS THE CORRECT VERTICAL PARSER ---
   const videos = [];
-  // Start loop at 1 to skip the header cells ("Title", "YouTube URL")
-  for (let i = 1; i < titleCells.length; i += 1) { 
-    if (urlCells[i]) { // Check that a URL cell exists for this title
-      const title = titleCells[i].textContent.trim();
-      const url = urlCells[i].textContent.trim();
+  // Start loop at i = 2 to skip Block Name (row 0) and Header (row 1)
+  for (let i = 2; i < rows.length; i += 1) { 
+    const cells = rows[i].querySelectorAll(':scope > div');
+    
+    if (cells.length >= 2) {
+      const title = cells[0].textContent.trim();
+      const url = cells[1].textContent.trim();
       const videoId = extractYouTubeId(url);
       
       if (videoId) {
         videos.push({ title, id: videoId });
       } else {
-        console.warn(`Invalid YouTube URL in column ${i + 1}: ${url}`);
+        console.warn(`Invalid YouTube URL in row ${i + 1}: ${url}`);
       }
     }
   }
