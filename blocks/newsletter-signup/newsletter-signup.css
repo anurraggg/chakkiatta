@@ -158,43 +158,126 @@
   font-size: 20px;
 }
 
-/* Mobile: Stack vertically */
-@media (max-width: 768px) {
-  .newsletter-signup {
-    flex-direction: column;
-    text-align: center;
-    gap: 15px;
+/* =========================================
+   MOBILE STYLING — replicate stacked footer layout
+   ========================================= */
+   @media (max-width: 768px) {
+    /* Base stacking */
+    .newsletter-signup {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px 10px;
+      gap: 25px;
+    }
+  
+    /* Left logos: stack vertically */
+    .newsletter-signup .left-logos {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+  
+    /* Hide ITC logo on mobile */
+    .newsletter-signup .left-logos img:first-child {
+      display: none;
+    }
+  
+    /* FSSAI logo centered and smaller */
+    .newsletter-signup .left-logos img:last-child {
+      width: 160px;
+      margin: 0 auto;
+      display: block;
+    }
+  
+    /* Center section */
+    .newsletter-signup .center-form {
+      align-items: center;
+      padding-left: 0;
+      gap: 15px;
+    }
+  
+    /* Title: Aashirvaad logo + text side by side */
+    .newsletter-signup .title {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+  
+    .newsletter-signup .title img {
+      height: 55px;
+    }
+  
+    .newsletter-signup .title span {
+      font-size: 22px;
+      padding-left: 0;
+    }
+  
+    /* Email input */
+    .newsletter-signup .email-input {
+      width: 90%;
+      background-color: #d9001d;
+      border: 2px solid #fff6e3;
+      border-radius: 25px;
+      padding: 12px 18px;
+      color: white;
+    }
+  
+    .newsletter-signup .email-input::placeholder {
+      color: #fff6e3;
+    }
+  
+    /* Checkbox and label */
+    .newsletter-signup .checkbox-row {
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      text-align: left;
+      gap: 8px;
+      max-width: 90%;
+    }
+  
+    .newsletter-signup .checkbox-row label {
+      font-size: 16px;
+      color: #fff6e3;
+      line-height: 1.4;
+    }
+  
+    /* Register button centered */
+    .newsletter-signup .register-btn {
+      margin: 0 auto;
+      padding: 14px 30px;
+      border-radius: 25px;
+      background-color: #ed808d;
+      font-size: 18px;
+    }
+  
+    /* Footer links stacked */
+    .newsletter-signup .right-links {
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 20px;
+    }
+  
+    .newsletter-signup .right-links .left-column,
+    .newsletter-signup .right-links .right-column {
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
+  
+    .newsletter-signup .right-links .separator {
+      display: none;
+    }
+  
+    .newsletter-signup .right-links span {
+      font-size: 16px;
+    }
   }
-  .newsletter-signup .left-logos {
-    flex-direction: row; /* Side-by-side on mobile for space */
-    justify-content: center;
-  }
-  .newsletter-signup .right-links {
-    flex-direction: column; /* Stack columns vertically on mobile */
-    align-items: center;
-    gap: 10px;
-  }
-  .newsletter-signup .right-links .separator {
-    display: none; /* Hide separator on mobile */
-  }
-  .newsletter-signup .email-input {
-    width: 100%;
-  }
-  .newsletter-signup .title {
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  .newsletter-signup .title img {
-    height: 40px; /* Smaller on mobile */
-  }
-  .newsletter-signup .checkbox-row {
-    text-align: center;
-    max-width: 100%;
-  }
-
-  img[alt="Aashirvaad Logo"] {
-    padding-bottom: 30px;
-    width: 60px;
-    height: 60px;
-  }
-}
+  
