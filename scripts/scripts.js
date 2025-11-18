@@ -185,3 +185,19 @@ window.addEventListener("franklin:load", () => {
   }
 });
 
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-ga-click]");
+  if (!el || !window.gtag) return;
+
+  const eventName = el.getAttribute("data-ga-click") || "click";
+  const eventLabel = el.getAttribute("data-ga-label") || el.innerText.trim();
+  const eventCategory = el.getAttribute("data-ga-category") || "interaction";
+
+  gtag("event", eventName, {
+    event_category: eventCategory,
+    event_label: eventLabel,
+    value: 1,
+  });
+
+  console.log("GA4 CLICK:", { eventName, eventCategory, eventLabel });
+});
