@@ -1,3 +1,28 @@
+
+/* --------------------------------------------
+   GA4 Tracking for AEM EDS (Manual Integration)
+---------------------------------------------*/
+
+// Load GA4 library
+const gaScript = document.createElement("script");
+gaScript.async = true;
+gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-4DVHQ0LHTV";
+document.head.appendChild(gaScript);
+
+// Setup dataLayer + gtag
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+window.gtag = gtag;
+
+gtag('js', new Date());
+
+// EDS is Soft-SPA → disable auto page views
+gtag('config', 'G-4DVHQ0LHTV', {
+  send_page_view: false
+});
+
+
+
 import {
   buildBlock,
   loadHeader,
@@ -12,6 +37,7 @@ import {
   loadSections,
   loadCSS,
 } from './aem.js';
+
 
 /**
  * Builds hero block and prepends to main in a new section.
