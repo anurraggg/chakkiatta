@@ -145,3 +145,17 @@ async function loadPage() {
 }
 
 loadPage();
+
+/* --------------------------------------------
+   EDS Soft-SPA Pageview Tracking for GA4
+---------------------------------------------*/
+window.addEventListener("franklin:load", () => {
+  if (window.gtag) {
+    gtag("event", "page_view", {
+      page_title: document.title,
+      page_location: window.location.href,
+      page_path: window.location.pathname
+    });
+  }
+});
+
